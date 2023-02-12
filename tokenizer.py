@@ -16,16 +16,14 @@ def getToken(currToken):
     return val
 
 def idName(currToken):
-    if currToken.isdigit():
+    if currToken.isalnum() and currToken.isupper():
         return currToken
-    else:
-        raise ValueError("Token is not an identifier: \"%s\"" % currToken)
+    raise ValueError("Token is not an identifier: \"%s\"" % currToken)
 
 def intVal(currToken):
-    if currToken.isalnum() and currToken.isupper():
+    if currToken.isdigit():
         return int(currToken)
-    else:
-        raise ValueError("Token is not an integer: \"%s\"" % currToken)
+    raise ValueError("Token is not an integer: \"%s\"" % currToken)
 
 def skipToken(currToken):
     currToken += 1
