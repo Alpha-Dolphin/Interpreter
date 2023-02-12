@@ -61,8 +61,8 @@ def tokenize(currLine):
                 token += currLine[i]
                 i += 1
                 if (token in dict):
-                    #len(token) == 1 check for effeciency
-                    if (i < len(currLine) and currLine[i] == '=') and (token == '=' or token == '!' or token == '<' or token == '>') :
+                    #len(token) == 1 check for effeciency as most tokens are > 1 len
+                    if len(token) == 1 and i < len(currLine) and currLine[i] == '=' and (token == '=' or token == '!' or token == '<' or token == '>') :
                         continue
                     yield dict[token]
                     token = ""
