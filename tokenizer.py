@@ -16,13 +16,13 @@ def getToken(currToken):
     return val
 
 def idName(currToken):
-    if (getToken(currToken) == 32):
+    if currToken.isdigit():
         return currToken
     else:
         raise ValueError("Token is not an identifier: \"%s\"" % currToken)
 
 def intVal(currToken):
-    if (getToken(currToken) == 31):
+    if currToken.isalnum() and currToken.isupper():
         return int(currToken)
     else:
         raise ValueError("Token is not an integer: \"%s\"" % currToken)
@@ -70,6 +70,7 @@ def tokenize(currLine):
                     yield dict[token]
                     token = ""
                     break
+                #Check for invalid token
 #               elif currLine[i] == " " :
 #                    raise ValueError("Token is not an valid keyword: \"%s\"" % token)
 
