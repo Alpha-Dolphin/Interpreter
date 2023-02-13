@@ -29,8 +29,10 @@ def intVal(currToken):
         return int(currToken)
     raise ValueError("Token is not an integer: \"%s\"" % currToken)
 
-def skipToken(currLine, currPos):
-    x = 4
+def skipToken(tokens, currPos):
+    if (currPos < len(tokens) and tokens[currPos] < 33) :
+        currPos += 1
+        return currPos
 
 def tokenize(currLine):
     token = ""
@@ -88,4 +90,10 @@ if __name__ == '__main__':
             tokens = [token for token in tokenize(line)]
             for token in tokens:
                 print(token)
+            tokens = [token for token in tokenize(line)]
+            print(tokens)
+        # currPos = 0
+        # while True :
+        #     print(tokens[currPos])
+        #     currPos = skipToken(tokens, currPos)
     inputFile.close()
