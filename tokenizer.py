@@ -90,7 +90,6 @@ if __name__ == '__main__':
             tokens = [token for token in tokenize(line)]
             for token in tokens:
                 print(token)
-            tokens = [token for token in tokenize(line)]
         #    print(tokens)
         # currPos = 0
         # while True :
