@@ -3,6 +3,10 @@
 import sys
 from dictionary import dict
 
+def _tokenizeLine(currLine):
+    tokens = [token for token in tokenize(currLine)]
+    return tokens
+
 def getToken(currToken):
     val = dict.get(currToken, -1)
     if val == -1:
@@ -25,8 +29,8 @@ def intVal(currToken):
         return int(currToken)
     raise ValueError("Token is not an integer: \"%s\"" % currToken)
 
-def skipToken(currToken):
-    currToken += 1
+def skipToken(currLine, currPos):
+    x = 4
 
 def tokenize(currLine):
     token = ""
@@ -69,8 +73,9 @@ def tokenize(currLine):
                     token = ""
                     break
                 #Check for invalid token
-#               elif currLine[i] == " " :
-#                    raise ValueError("Token is not an valid keyword: \"%s\"" % token)
+                elif i < len(currLine) and currLine[i] == " " :
+                    raise ValueError("Token is not an valid keyword: \"%s\"" % token)
+    yield 33
 
 if __name__ == '__main__':
     input_file_name = "debug.txt"
@@ -81,6 +86,6 @@ if __name__ == '__main__':
     with inputFile as f:
         for line in f:
             tokens = [token for token in tokenize(line)]
-            print(" ".join(str(token) for token in tokens))
-        print("33")
+            for token in tokens:
+                print(token)
     inputFile.close()
