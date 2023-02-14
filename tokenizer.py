@@ -50,17 +50,19 @@ def tokenize(currLine):
         
         elif currLine[i].isdigit():
             while i < len(currLine) and currLine[i].isdigit() :
+                token += currLine[i]
                 i += 1
             yield 31
-            dumb = False
+            dumb = dumbChecker(dumb, token)
         
         #Identifiers
         
         elif currLine[i].isupper():
             while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
+                token += currLine[i]
                 i += 1
             yield 32
-            dumb = False
+            dumb = dumbChecker(dumb, token)
 
         #Keywords & reserved words
 
@@ -74,11 +76,7 @@ def tokenize(currLine):
                     if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                         #Could manually append = but this is simplier
                         continue
-                    elif not (dumb or (12 <= dict[token] <= 30)):
-                        raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-                    dumb = False
-                    if 12 <= dict[token] <= 30 :
-                        dumb = True
+                    dumb = dumbChecker(dumb, token)
                     yield dict[token]
                     token = ""
                     break
@@ -86,6 +84,14 @@ def tokenize(currLine):
                 elif i < len(currLine) and currLine[i] == " " :
                     raise ValueError("Token is not an valid keyword: \"%s\"" % token)
     yield 33
+
+def dumbChecker(dumb, token) :
+    if not (dumb or (12 <= dict.get(token, -1) <= 30)):
+        raise ValueError("Invalid whitespace at token: \"%s\"" % token)
+    dumb = False
+    if dict.get(token, -1) != -1 and 12 <= dict[token] <= 30 :
+        dumb = True
+    return dumb
 
 if __name__ == '__main__':
     input_file_name = "debug.txt"
