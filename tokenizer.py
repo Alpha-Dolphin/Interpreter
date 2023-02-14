@@ -29,12 +29,10 @@ def idName(currToken):
 def intVal(currToken):
     return int(currToken) if currToken.isdigit() else ValueError("Token is not an integer: \"%s\"" % currToken)
 
-
 #Increment index to currPos
 def skipToken(tokens, currPos):
-    if (currPos < len(tokens) and tokens[currPos] < 33) :
-        currPos += 1
-        return currPos
+    if (currPos[0] < len(tokens) and tokens[currPos[0]] < 33) :
+        currPos[0] += 1
 
 def tokenize(currLine):
     token = ""
