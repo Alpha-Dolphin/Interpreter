@@ -85,9 +85,9 @@ def tokenize(currLine):
     yield 33
 
 def dumbChecker(dumb, token) :
-    if not (dumb or (12 <= dict.get(token, -1) <= 30)):
+    if not (dumb or (12 <= dict[token] <= 30)):
         raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-    dumb = True if 12 <= dict.get(token, -1) <= 30 else False
+    dumb = True if 12 <= dict[token] <= 30 else False
     return dumb
 
 if __name__ == '__main__':
