@@ -52,6 +52,7 @@ def tokenize(currLine):
             while i < len(currLine) and currLine[i].isdigit() :
                 i += 1
             yield 31
+            dumb = False
         
         #Identifiers
         
@@ -59,6 +60,7 @@ def tokenize(currLine):
             while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                 i += 1
             yield 32
+            dumb = False
 
         #Keywords & reserved words
 
@@ -72,7 +74,7 @@ def tokenize(currLine):
                     if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                         #Could manually append = but this is simplier
                         continue
-                    elif not dumb :
+                    elif not (dumb or (12 <= dict[token] <= 30)):
                         raise ValueError("Invalid whitespace at token: \"%s\"" % token)
                     if not 12 <= dict[token] <= 30 :
                         dumb = False
