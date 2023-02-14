@@ -39,7 +39,9 @@ def tokenize(currLine):
     i = 0
     #This functionality is dumb
     dumb = True
+
     while i < len(currLine):
+        token = ""
 
         #White space
 
@@ -79,7 +81,6 @@ def tokenize(currLine):
                         continue
                     dumb = dumbChecker(dumb, token)
                     yield dict[token]
-                    token = ""
                     break
                 #Check for invalid token
                 elif i < len(currLine) and currLine[i] == " " :
@@ -89,9 +90,7 @@ def tokenize(currLine):
 def dumbChecker(dumb, token) :
     if not (dumb or (12 <= dict.get(token, -1) <= 30)):
         raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-    dumb = False
-    if dict.get(token, -1) != -1 and 12 <= dict[token] <= 30 :
-        dumb = True
+    dumb = True if 12 <= dict.get(token, -1) <= 30 else False
     return dumb
 
 if __name__ == '__main__':
