@@ -2,6 +2,7 @@
 
 import sys
 from dictionary import dict
+import fileinput
 
 # def _tokenizeLine(currLine):
 #     tokens = [token for token in tokenize(currLine)]
@@ -14,21 +15,22 @@ def getToken(currToken):
             val = 31
         elif currToken.isalnum() and currToken.isupper():
             val = 32
+        #Ascii value of eof token is 3 (called End Of Text or EOT)
+        elif 3 == ascii(currToken):
+            val = 33
         else:
             val = 34
-            raise ValueError("Invalid token encountered: \"%s\"" % currToken)
     return val
 
 def idName(currToken):
-    if currToken.isalnum() and currToken.isupper():
-        return currToken
-    raise ValueError("Token is not an identifier: \"%s\"" % currToken)
+    return currToken if currToken.isalnum() and currToken.isupper() else ValueError("Token is not an identifier: \"%s\"" % currToken)
+
 
 def intVal(currToken):
-    if currToken.isdigit():
-        return int(currToken)
-    raise ValueError("Token is not an integer: \"%s\"" % currToken)
+    return int(currToken) if currToken.isdigit() else ValueError("Token is not an integer: \"%s\"" % currToken)
 
+
+#Increment index to currPos
 def skipToken(tokens, currPos):
     if (currPos < len(tokens) and tokens[currPos] < 33) :
         currPos += 1
@@ -55,7 +57,7 @@ def tokenize(currLine):
                 i += 1
             yield 31
             dumb = False
-            
+
         #Identifiers
         
         elif currLine[i].isupper():
