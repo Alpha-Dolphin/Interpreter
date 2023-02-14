@@ -41,7 +41,6 @@ def tokenize(currLine):
     dumb = True
 
     while i < len(currLine):
-        token = ""
 
         #White space
 
@@ -53,19 +52,16 @@ def tokenize(currLine):
         
         elif currLine[i].isdigit():
             while i < len(currLine) and currLine[i].isdigit() :
-                token += currLine[i]
                 i += 1
             yield 31
-            dumb = dumbChecker(dumb, token)
-        
+            dumb = False     
         #Identifiers
         
         elif currLine[i].isupper():
             while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
-                token += currLine[i]
                 i += 1
             yield 32
-            dumb = dumbChecker(dumb, token)
+            dumb = False     
 
         #Keywords & reserved words
 
@@ -81,6 +77,7 @@ def tokenize(currLine):
                         continue
                     dumb = dumbChecker(dumb, token)
                     yield dict[token]
+                    token = ""
                     break
                 #Check for invalid token
                 elif i < len(currLine) and currLine[i] == " " :

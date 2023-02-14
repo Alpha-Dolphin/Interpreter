@@ -40,8 +40,8 @@ def tokenize(currLine):
                     if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                         #Could manually append = but this is simplier
                         continue
-                    token = ""
                     yield dict[token]
+                    token = ""
                     break
                 #Check for invalid token
                 elif i < len(currLine) and currLine[i] == " " :
