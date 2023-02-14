@@ -37,13 +37,14 @@ def skipToken(tokens, currPos):
 def tokenize(currLine):
     token = ""
     i = 0
-
+    dumb = True
     while i < len(currLine):
 
         #White space
 
         if currLine[i] == ' ' :
             i += 1
+            dumb = True
 
         #Integers
         
@@ -71,6 +72,11 @@ def tokenize(currLine):
                     if len(token) == 1 and i < len(currLine) and currLine[i] == '=' and (token == '=' or token == '!' or token == '<' or token == '>') :
                         #Could manually append = but this is simplier
                         continue
+                    elif not dumb :
+                        raise ValueError("Invalid whitespace at token: \"%s\"" % token)
+                    dumb = False
+                    if 12 <= dict[token] <= 30 :
+                        dumb = True
                     yield dict[token]
                     token = ""
                     break
