@@ -3,9 +3,9 @@
 import sys
 from dictionary import dict
 
-def _tokenizeLine(currLine):
-    tokens = [token for token in tokenize(currLine)]
-    return tokens
+# def _tokenizeLine(currLine):
+#     tokens = [token for token in tokenize(currLine)]
+#     return tokens
 
 def getToken(currToken):
     val = dict.get(currToken, -1)
@@ -74,9 +74,8 @@ def tokenize(currLine):
                         continue
                     elif not dumb :
                         raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-                    dumb = False
-                    if 12 <= dict[token] <= 30 :
-                        dumb = True
+                    if not 12 <= dict[token] <= 30 :
+                        dumb = False
                     yield dict[token]
                     token = ""
                     break
