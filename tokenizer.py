@@ -76,8 +76,9 @@ def tokenize(currLine):
                         continue
                     elif not (dumb or (12 <= dict[token] <= 30)):
                         raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-                    if not 12 <= dict[token] <= 30 :
-                        dumb = False
+                    dumb = False
+                    if 12 <= dict[token] <= 30 :
+                        dumb = True
                     yield dict[token]
                     token = ""
                     break
