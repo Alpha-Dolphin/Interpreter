@@ -37,6 +37,7 @@ def skipToken(tokens, currPos):
 def tokenize(currLine):
     token = ""
     i = 0
+    #This functionality is dumb
     dumb = True
     while i < len(currLine):
 
