@@ -3,33 +3,6 @@
 import sys
 from dictionary import dict
 
-def getToken(currToken):
-    val = dict.get(currToken, -1)
-    if val == -1:
-        if currToken.isdigit():
-            val = 31
-        elif currToken.isalnum() and currToken.isupper():
-            val = 32
-        else:
-            val = 34
-            raise ValueError("Invalid token encountered: \"%s\"" % currToken)
-    return val
-
-def idName(currToken):
-    if currToken.isalnum() and currToken.isupper():
-        return currToken
-    raise ValueError("Token is not an identifier: \"%s\"" % currToken)
-
-def intVal(currToken):
-    if currToken.isdigit():
-        return int(currToken)
-    raise ValueError("Token is not an integer: \"%s\"" % currToken)
-
-def skipToken(tokens, currPos):
-    if (currPos < len(tokens) and tokens[currPos] < 33) :
-        currPos += 1
-        return currPos
-
 def tokenize(currLine):
     token = ""
     i = 0
