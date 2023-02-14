@@ -54,7 +54,8 @@ def tokenize(currLine):
             while i < len(currLine) and currLine[i].isdigit() :
                 i += 1
             yield 31
-            dumb = False     
+            dumb = False
+            
         #Identifiers
         
         elif currLine[i].isupper():
