@@ -39,7 +39,6 @@ class Tokenizer:
     def tokenize(self, currLine):
         token = ""
         i = 0
-        #This functionality is dumb
 
         while i < len(currLine):
 
