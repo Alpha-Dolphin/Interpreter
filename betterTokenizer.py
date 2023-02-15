@@ -28,7 +28,6 @@ class Tokenizer:
     def idName(self, currToken):
         return currToken if currToken.isalnum() and currToken.isupper() else ValueError("Token is not an identifier: \"%s\"" % currToken)
 
-
     def intVal(self, currToken):
         return int(currToken) if currToken.isdigit() else ValueError("Token is not an integer: \"%s\"" % currToken)
 
