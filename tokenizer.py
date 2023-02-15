@@ -7,7 +7,7 @@ from dictionary import dict
 #     tokens = [token for token in tokenize(currLine)]
 #     return tokens
 class Tokenizer:
-    
+
     def __init__(self):
         self.currPos = 0
 
@@ -33,8 +33,8 @@ class Tokenizer:
         return int(currToken) if currToken.isdigit() else ValueError("Token is not an integer: \"%s\"" % currToken)
 
     def skipToken(self, tokens):
-        if (Tokenizer.currPos < len(tokens) and tokens[Tokenizer.currPos] < 33) :
-            Tokenizer.currPos += 1
+        if (self.currPos < len(tokens) and tokens[self.currPos] < 33) :
+            self.currPos += 1
 
     def tokenize(self, currLine):
         token = ""
@@ -78,7 +78,7 @@ class Tokenizer:
                         if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                             #Could manually append = but this is simplier
                             continue
-                        dumb = Tokenizer.dumbChecker(dumb, token)
+                        dumb = self.dumbChecker(dumb, token)
                         yield dict[token]
                         token = ""
                         break
