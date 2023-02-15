@@ -88,7 +88,6 @@ if __name__ == '__main__':
     tokens = ""
     tokenizer = Tokenizer()
     with open(input_file_name) as f:
-        tokenizer = Tokenizer()
         tokens = tokenizer.tokenize(f.read())
         for token in tokens:
             print(token)
