@@ -31,8 +31,9 @@ def intVal(currToken):
 
 #Increment index to currPos
 def skipToken(tokens, currPos):
-    if (currPos[0] < len(tokens) and tokens[currPos[0]] < 33) :
-        currPos[0] += 1
+    if (currPos < len(tokens) and tokens[currPos[0]] < 33) :
+        currPos += 1
+    return currPos
 
 def tokenize(currLine):
     token = ""
