@@ -2,11 +2,12 @@
 
 import sys
 from dictionary import dict
-import fileinput
 
 # def _tokenizeLine(currLine):
 #     tokens = [token for token in tokenize(currLine)]
 #     return tokens
+
+currPos = 0
 
 def getToken(currToken):
     val = dict.get(currToken, -1)
@@ -15,7 +16,7 @@ def getToken(currToken):
             val = 31
         elif currToken.isalnum() and currToken.isupper():
             val = 32
-        #Ascii value of eof token is 3 (called End Of Text or EOT)
+        #Ascii value of eof token is 3 (called end of text or EOT)
         elif 3 == ascii(currToken):
             val = 33
         else:
@@ -29,11 +30,9 @@ def idName(currToken):
 def intVal(currToken):
     return int(currToken) if currToken.isdigit() else ValueError("Token is not an integer: \"%s\"" % currToken)
 
-#Increment index to currPos
-def skipToken(tokens, currPos):
-    if (currPos < len(tokens) and tokens[currPos[0]] < 33) :
+def skipToken(tokens):
+    if (currPos < len(tokens) and tokens[currPos] < 33) :
         currPos += 1
-    return currPos
 
 def tokenize(currLine):
     token = ""
