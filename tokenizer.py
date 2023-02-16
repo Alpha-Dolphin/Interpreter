@@ -3,13 +3,14 @@
 import sys
 from dictionary import dict
 
-# def _tokenizeLine(currLine):
-#     tokens = [token for token in tokenize(currLine)]
-#     return tokens
 class Tokenizer:
 
     def __init__(self):
         self.currPos = 0
+    
+    # def _tokenizeLine(currLine):
+    #     tokens = [token for token in tokenize(currLine)]
+    #     return tokens
 
     def getToken(self, currToken):
         val = dict.get(currToken, -1)
