@@ -3,9 +3,6 @@
 import sys
 from dictionary import dict
 
-# def _tokenizeLine(currLine):
-#     tokens = [token for token in tokenize(currLine)]
-#     return tokens
 class Tokenizer:
 
     def __init__(self):
@@ -67,9 +64,4 @@ if __name__ == '__main__':
         tokens = tokenizer.tokenize(f.read())
         for token in tokens:
             print(token)
-        #    print(tokens)
-        # currPos = 0
-        # while True :
-        #     print(tokens[currPos])
-        #     currPos = skipToken(tokens, currPos)
     inputFile.close()
