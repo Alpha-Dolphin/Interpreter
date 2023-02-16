@@ -32,7 +32,7 @@ class Tokenizer:
         return int(currToken) if currToken.isdigit() else ValueError("Token is not an integer: \"%s\"" % currToken)
 
     def skipToken(self, tokens):
-        if (self.currPos < len(tokens) and tokens[self.currPos] < 33) :
+        if (self.currPos < len(tokens) and dict[tokens[self.currPos]] < 33) :
             self.currPos += 1
 
     def tokenize(self, currLine):
