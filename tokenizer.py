@@ -88,6 +88,7 @@ class Tokenizer:
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
+        #Conventional end of text character
         list.append((33, "\x1A"))
         return list
 
@@ -118,5 +119,3 @@ if __name__ == '__main__':
 
     #Now crash :)
     token = tokenizer.intVal()
-
-
