@@ -93,10 +93,14 @@ class Tokenizer:
         return list
 
     def dumbChecker(self, dumb, token) :
-        if not (dumb or (12 <= dict[token] <= 30)):
+        if (12 <= dict[token] <= 30) :
+            return True
+        elif dumb :
+            return False
+        else :
             raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-        dumb = True if 12 <= dict[token] <= 30 else False
-        return dumb
+
+
 
 if __name__ == '__main__':
     input_file_name = "debug.txt"
