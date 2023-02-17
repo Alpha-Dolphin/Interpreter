@@ -72,7 +72,6 @@ class Tokenizer:
                 #Keywords & reserved words
 
                 else:
-                    #Loop here for efficiency (now required as i no longer increments in outer loop)
                     token = ""
                     while i < len(currLine) :
                         token += currLine[i]
@@ -80,7 +79,7 @@ class Tokenizer:
                         if (token in dict):
                             #len(token) == 1 check for effeciency as most tokens are > 1 len
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
-                                #Could manually append = but this is simplier
+                                #Could manually append an "=" but this is simplier
                                 continue
                             list.append((dict[token], token))
                             dumb = self.dumbChecker(dumb, token)
