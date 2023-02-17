@@ -113,10 +113,10 @@ if __name__ == '__main__':
         print(token)
 
     # Call idName() and print the return value
-    id = tokenizer.idName()
-    print(id)
+    token = tokenizer.idName()
+    print(token)
 
     #Now crash :)
-    id = tokenizer.intVal()
+    token = tokenizer.intVal()
 
 
