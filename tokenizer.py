@@ -105,17 +105,14 @@ if __name__ == '__main__':
     tokenizer = Tokenizer(input_file_name)
 
     # Call getToken() and print the return value
-    token = tokenizer.getToken()
-    print(token)
+    print(tokenizer.getToken())
 
     # Call skipToken() multiple times and print the return value
     for i in range(2):
-        token = tokenizer.skipToken()
-        print(token)
+        print(tokenizer.skipToken())
 
     # Call idName() and print the return value
-    token = tokenizer.idName()
-    print(token)
+    print(tokenizer.idName())
 
     #Now crash :)
-    token = tokenizer.intVal()
+    print(tokenizer.intVal())
