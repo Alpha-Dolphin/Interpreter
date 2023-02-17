@@ -38,7 +38,6 @@ class Tokenizer:
 
     def tokenize(self, currLine):
         token = ""
-        i = 0
         #This functionality is dumb
         dumb = True
 
