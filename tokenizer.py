@@ -82,8 +82,8 @@ class Tokenizer:
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append = but this is simplier
                                 continue
-                            dumb = self.dumbChecker(dumb, token)
                             list.append((dict[token], token))
+                            dumb = self.dumbChecker(dumb, token)
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
