@@ -119,6 +119,4 @@ if __name__ == '__main__':
     #Now crash :)
     id = tokenizer.intVal()
 
-    #Now crash :)
-    id = tokenizer.intVal()
 
