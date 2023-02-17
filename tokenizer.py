@@ -100,8 +100,6 @@ class Tokenizer:
         else :
             raise ValueError("Invalid whitespace at token: \"%s\"" % token)
 
-
-
 if __name__ == '__main__':
     input_file_name = "debug.txt"
     if len(sys.argv) > 1:
