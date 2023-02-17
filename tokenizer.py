@@ -10,41 +10,32 @@ class Tokenizer:
         self.input_file = open(input_file_name, "r")
         with open(input_file_name) as self.input_file:
             self.tokens = self.tokenize()
-            for token in self.tokens:
-                print(token)
-
-
-    # def _tokenizeLine(currLine):
-    #     tokens = [token for token in tokenize(currLine)]
-    #     return tokens
+            # for token in self.tokens:
+            #     print(token)
 
     def getToken(self):
-        val = dict.get(self.tokens[self.currPos], -1)
-        if val == -1:
-            if self.tokens[self.currPos].isdigit():
-                val = 31
-            elif self.tokens[self.currPos].isalnum() and self.tokens[self.currPos].isupper():
-                val = 32
-            #Ascii value of eof token is 3 (called end of text or EOT)
-            elif 3 == ascii(self.tokens[self.currPos]):
-                val = 33
-            else:
-                val = 34
-        return val
+        return self.tokens[self.currPos][0]
 
     def idName(self):
-        return self.tokens[self.currPos] if self.tokens[self.currPos].isalnum() and self.tokens[self.currPos].isupper() else ValueError("Token is not an identifier: \"%s\"" % self.tokens[self.currPos])
+        #Python doesn't allow exception raises in ternaries, what a rip off
+        if self.tokens[self.currPos][0] == 32:
+            return self.tokens[self.currPos][1]
+        else:
+            raise ValueError("Token is not an identifier: \"%s\"" % self.tokens[self.currPos][1])
 
     def intVal(self):
-        return int(self.tokens[self.currPos]) if self.tokens[self.currPos].isdigit() else ValueError("Token is not an integer: \"%s\"" % self.tokens[self.currPos])
+        if self.tokens[self.currPos][0] == 31:
+            return self.tokens[self.currPos][1]
+        else:
+            raise ValueError("Token is not an integer: \"%s\"" % self.tokens[self.currPos][1])
 
     def skipToken(self):
-        if (self.currPos < len(tokens) and self.getToken() < 33) :
+        if (self.currPos < len(self.tokens) and self.tokens[self.currPos][0] < 33) :
             self.currPos += 1
 
     def tokenize(self):
         list = []
-        token = ""
+        i = 0
         #This functionality is dumb
         dumb = True
 
@@ -61,23 +52,28 @@ class Tokenizer:
                 #Integers
                 
                 elif currLine[i].isdigit():
+                    integer = 0
                     while i < len(currLine) and currLine[i].isdigit() :
+                        integer *= 10 + int(currLine[i])
                         i += 1
-                    list.append(31)
+                    list.append((31, integer))
                     dumb = False
 
                 #Identifiers
                 
                 elif currLine[i].isupper():
+                    id = ""
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
+                        id += currLine[i]
                         i += 1
-                    list.append(32)
+                    list.append((32, id))
                     dumb = False     
 
                 #Keywords & reserved words
 
                 else:
                     #Loop here for efficiency (now required as i no longer increments in outer loop)
+                    token = ""
                     while i < len(currLine) :
                         token += currLine[i]
                         i += 1
@@ -87,13 +83,12 @@ class Tokenizer:
                                 #Could manually append = but this is simplier
                                 continue
                             dumb = self.dumbChecker(dumb, token)
-                            list.append(dict[token])
-                            token = ""
+                            list.append((dict[token], token))
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
-        list.append(31)
+        list.append((33, "\x1A"))
         return list
 
     def dumbChecker(self, dumb, token) :
@@ -106,5 +101,24 @@ if __name__ == '__main__':
     input_file_name = "debug.txt"
     if len(sys.argv) > 1:
         input_file_name = sys.argv[1]
-    tokens = ""
     tokenizer = Tokenizer(input_file_name)
+
+    # Call getToken() and print the return value
+    token = tokenizer.getToken()
+    print(token)
+
+    # Call skipToken() multiple times and print the return value
+    for i in range(2):
+        token = tokenizer.skipToken()
+        print(token)
+
+    # Call idName() and print the return value
+    id = tokenizer.idName()
+    print(id)
+
+    #Now crash :)
+    id = tokenizer.intVal()
+
+    #Now crash :)
+    id = tokenizer.intVal()
+
