@@ -10,8 +10,8 @@ class Tokenizer:
         self.input_file = open(input_file_name, "r")
         with open(input_file_name) as self.input_file:
             self.tokens = self.tokenize()
-            # for token in self.tokens:
-            #     print(token)
+            for token in self.tokens:
+                print(token)
 
     def getToken(self):
         return self.tokens[self.currPos][0]
@@ -52,11 +52,11 @@ class Tokenizer:
                 #Integers
                 
                 elif currLine[i].isdigit():
-                    integer = 0
+                    value = 0
                     while i < len(currLine) and currLine[i].isdigit() :
-                        integer *= 10 + int(currLine[i])
+                        value = value * 10 + int(currLine[i])
                         i += 1
-                    list.append((31, integer))
+                    list.append((31, value))
                     dumb = False
 
                 #Identifiers
