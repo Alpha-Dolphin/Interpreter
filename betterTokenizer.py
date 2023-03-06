@@ -36,7 +36,6 @@ class Tokenizer:
     def tokenize(self):
         list = []
         i = 0
-        #This functionality is dumb
 
         for currLine in self.input_file :
             
@@ -50,11 +49,11 @@ class Tokenizer:
                 #Integers
                 
                 elif currLine[i].isdigit():
-                    integer = 0
+                    value = 0
                     while i < len(currLine) and currLine[i].isdigit() :
-                        integer *= 10 + int(currLine[i])
+                        value = value * 10 + int(currLine[i])
                         i += 1
-                    list.append((31, integer))
+                    list.append((31, value))
 
                 #Identifiers
                 
@@ -68,7 +67,6 @@ class Tokenizer:
                 #Keywords & reserved words
 
                 else:
-                    #Loop here for efficiency (now required as i no longer increments in outer loop)
                     token = ""
                     while i < len(currLine) :
                         token += currLine[i]
@@ -76,13 +74,14 @@ class Tokenizer:
                         if (token in dict):
                             #len(token) == 1 check for effeciency as most tokens are > 1 len
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
-                                #Could manually append = but this is simplier
+                                #Could manually append an "=" but this is simplier
                                 continue
                             list.append((dict[token], token))
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
+        #Conventional end of text character
         list.append((33, "\x1A"))
         return list
 
@@ -93,20 +92,14 @@ if __name__ == '__main__':
     tokenizer = Tokenizer(input_file_name)
 
     # Call getToken() and print the return value
-    token = tokenizer.getToken()
-    print(token)
+    print(tokenizer.getToken())
 
     # Call skipToken() multiple times and print the return value
     for i in range(2):
-        token = tokenizer.skipToken()
-        print(token)
+        print(tokenizer.skipToken())
 
     # Call idName() and print the return value
-    id = tokenizer.idName()
-    print(id)
+    print(tokenizer.idName())
 
     #Now crash :)
-    id = tokenizer.intVal()
-
-    #Now crash :)
-    id = tokenizer.intVal()
+    print(tokenizer.intVal())
