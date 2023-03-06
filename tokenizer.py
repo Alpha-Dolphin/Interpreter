@@ -39,7 +39,9 @@ class Tokenizer:
         dumb = True
 
         for currLine in self.input_file :
+            
             i = 0 
+            
             while i < len(currLine) :
 
                 #White space
@@ -99,20 +101,7 @@ class Tokenizer:
             raise ValueError("Invalid whitespace at token: \"%s\"" % token)
 
 if __name__ == '__main__':
-    input_file_name = "debug.txt"
+    input_file_name = "test2Tokens.txt"
     if len(sys.argv) > 1:
         input_file_name = sys.argv[1]
     tokenizer = Tokenizer(input_file_name)
-
-    # Call getToken() and print the return value
-    print(tokenizer.getToken())
-
-    # Call skipToken() multiple times and print the return value
-    for i in range(2):
-        print(tokenizer.skipToken())
-
-    # Call idName() and print the return value
-    print(tokenizer.idName())
-
-    #Now crash :)
-    print(tokenizer.intVal())

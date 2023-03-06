@@ -35,10 +35,11 @@ class Tokenizer:
 
     def tokenize(self):
         list = []
-        i = 0
 
         for currLine in self.input_file :
-            
+                        
+            i = 0 
+         
             while i < len(currLine) :
 
                 #White space
@@ -91,15 +92,3 @@ if __name__ == '__main__':
         input_file_name = sys.argv[1]
     tokenizer = Tokenizer(input_file_name)
 
-    # Call getToken() and print the return value
-    print(tokenizer.getToken())
-
-    # Call skipToken() multiple times and print the return value
-    for i in range(2):
-        print(tokenizer.skipToken())
-
-    # Call idName() and print the return value
-    print(tokenizer.idName())
-
-    #Now crash :)
-    print(tokenizer.intVal())
