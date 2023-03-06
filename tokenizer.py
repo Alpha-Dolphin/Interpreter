@@ -35,12 +35,11 @@ class Tokenizer:
 
     def tokenize(self):
         list = []
-        i = 0
         #This functionality is dumb
         dumb = True
 
         for currLine in self.input_file :
-            
+            i = 0 
             while i < len(currLine) :
 
                 #White space
