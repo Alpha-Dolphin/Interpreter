@@ -40,7 +40,7 @@ class Tokenizer:
 
         for currLine in self.input_file :
             
-            i = 0 
+            i = 0
             
             while i < len(currLine) :
 
