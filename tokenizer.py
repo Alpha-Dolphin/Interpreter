@@ -57,8 +57,8 @@ class Tokenizer:
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
                         i += 1
+                    dumb = self.dumbChecker(dumb, value)
                     list.append((31, value))
-                    dumb = False
 
                 #Identifiers
                 
@@ -67,8 +67,8 @@ class Tokenizer:
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
                         i += 1
+                    dumb = self.dumbChecker(dumb, id)
                     list.append((32, id))
-                    dumb = False     
 
                 #Keywords & reserved words
 
@@ -93,7 +93,7 @@ class Tokenizer:
         return list
 
     def dumbChecker(self, dumb, token) :
-        if (12 <= dict[token] <= 30) :
+        if (token in dict and 12 <= dict[token] <= 30) :
             return True
         elif dumb :
             return False
@@ -105,3 +105,8 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         input_file_name = sys.argv[1]
     tokenizer = Tokenizer(input_file_name)
+    # Create prog node
+    # All nodes import tokenizer functionality
+    # Gettoken, generate app. node, skip token.
+    # Abstract parse tree
+    # Reccomend OO approach
