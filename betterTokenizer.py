@@ -1,5 +1,3 @@
-#Ben Elleman
-
 import sys
 from dictionary import dict
 
