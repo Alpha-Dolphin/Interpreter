@@ -107,4 +107,4 @@ if __name__ == '__main__':
     # All nodes import tokenizer functionality
     # Gettoken, generate app. node, skip token.
     # Abstract parse tree
-    # Reccomend OO approach
+    # Reccommend OO approach
