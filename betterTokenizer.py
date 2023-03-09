@@ -5,7 +5,7 @@ from tokenizer import Tokenizer
 class BetterTokenizer(Tokenizer):
 
     def tokenize(self):
-        list = []
+        self.tokens = []
 
         for currLine in self.input_file :
                         
@@ -25,7 +25,7 @@ class BetterTokenizer(Tokenizer):
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
                         i += 1
-                    list.append((31, value))
+                    self.tokens.append((31, value))
 
                 #Identifiers
                 
@@ -34,7 +34,7 @@ class BetterTokenizer(Tokenizer):
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
                         i += 1
-                    list.append((32, id))
+                    self.tokens.append((32, id))
 
                 #Keywords & reserved words
 
@@ -48,11 +48,10 @@ class BetterTokenizer(Tokenizer):
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
                                 continue
-                            list.append((dict[token], token))
+                            self.tokens.append((dict[token], token))
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
         #Conventional end of text character
-        list.append((33, "\x1A"))
-        return list
+        self.tokens.append((33, "\x1A"))
