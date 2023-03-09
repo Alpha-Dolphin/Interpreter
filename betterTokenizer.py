@@ -5,7 +5,6 @@ from tokenizer import Tokenizer
 class BetterTokenizer(Tokenizer):
 
     def tokenize(self):
-        self.tokens = []
 
         for currLine in self.input_file :
                         
