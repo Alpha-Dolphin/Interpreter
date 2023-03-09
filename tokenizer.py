@@ -54,8 +54,8 @@ class Tokenizer:
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
                         i += 1
-                    dumb = self.dumbChecker(dumb, value)
                     self.tokens.append((31, value))
+                    dumb = self.dumbChecker(dumb, value)
 
                 #Identifiers
                 
@@ -64,8 +64,8 @@ class Tokenizer:
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
                         i += 1
-                    dumb = self.dumbChecker(dumb, id)
                     self.tokens.append((32, id))
+                    dumb = self.dumbChecker(dumb, id)
 
                 #Keywords & reserved words
 
