@@ -7,9 +7,9 @@ class Tokenizer:
         self.currPos = 0
         self.input_file = open(input_file_name, "r")
         with open(input_file_name) as self.input_file:
-            self.tokens = self.tokenize()
-            # for token in self.tokens:
-            #     print(token)
+            self.tokenize()
+            for token in self.tokens:
+                print(token)
 
     def getToken(self):
         return self.tokens[self.currPos][0]
@@ -32,12 +32,11 @@ class Tokenizer:
             self.currPos += 1
 
     def tokenize(self):
-        list = []
         #This functionality is dumb
         dumb = True
 
         for currLine in self.input_file :
-            
+            self.tokens = []
             i = 0
             
             while i < len(currLine) :
@@ -56,7 +55,7 @@ class Tokenizer:
                         value = value * 10 + int(currLine[i])
                         i += 1
                     dumb = self.dumbChecker(dumb, value)
-                    list.append((31, value))
+                    self.tokens.append((31, value))
 
                 #Identifiers
                 
@@ -66,7 +65,7 @@ class Tokenizer:
                         id += currLine[i]
                         i += 1
                     dumb = self.dumbChecker(dumb, id)
-                    list.append((32, id))
+                    self.tokens.append((32, id))
 
                 #Keywords & reserved words
 
@@ -80,15 +79,14 @@ class Tokenizer:
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
                                 continue
-                            list.append((dict[token], token))
+                            self.tokens.append((dict[token], token))
                             dumb = self.dumbChecker(dumb, token)
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
         #Conventional end of text character
-        list.append((33, "\x1A"))
-        return list
+        self.tokens.append((33, "\x1A"))
 
     def dumbChecker(self, dumb, token) :
         if (token in dict and 12 <= dict[token] <= 30) :
