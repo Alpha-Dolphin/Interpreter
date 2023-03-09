@@ -1,35 +1,8 @@
 import sys
 from dictionary import dict
+from tokenizer import Tokenizer
 
-class Tokenizer:
-
-    def __init__(self, input_file_name):
-        self.currPos = 0
-        self.input_file = open(input_file_name, "r")
-        with open(input_file_name) as self.input_file:
-            self.tokens = self.tokenize()
-            # for token in self.tokens:
-            #     print(token)
-
-    def getToken(self):
-        return self.tokens[self.currPos][0]
-
-    def idName(self):
-        #Python doesn't allow exception raises in ternaries, what a rip off
-        if self.tokens[self.currPos][0] == 32:
-            return self.tokens[self.currPos][1]
-        else:
-            raise ValueError("Token is not an identifier: \"%s\"" % self.tokens[self.currPos][1])
-
-    def intVal(self):
-        if self.tokens[self.currPos][0] == 31:
-            return self.tokens[self.currPos][1]
-        else:
-            raise ValueError("Token is not an integer: \"%s\"" % self.tokens[self.currPos][1])
-
-    def skipToken(self):
-        if (self.currPos < len(self.tokens) and self.tokens[self.currPos][0] < 33) :
-            self.currPos += 1
+class BetterTokenizer(Tokenizer):
 
     def tokenize(self):
         list = []
@@ -83,9 +56,3 @@ class Tokenizer:
         #Conventional end of text character
         list.append((33, "\x1A"))
         return list
-
-if __name__ == '__main__':
-    input_file_name = "debug.txt"
-    if len(sys.argv) > 1:
-        input_file_name = sys.argv[1]
-    tokenizer = Tokenizer(input_file_name)
