@@ -88,7 +88,7 @@ class Tokenizer:
         self.tokens.append((33, "\x1A"))
 
     def dumbChecker(self, dumb, token) :
-        if (token in dict and 12 <= dict[token] <= 30) :
+        if dict.get(token, -1) in range(12, 31):
             return True
         elif dumb :
             return False
