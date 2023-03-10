@@ -1,4 +1,3 @@
-import sys
 from dictionary import dict
 from tokenizer import Tokenizer
 
