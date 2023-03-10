@@ -53,8 +53,8 @@ class Tokenizer:
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
                         i += 1
-                    self.tokens.append((31, value))
                     dumb = self.dumbChecker(dumb, value)
+                    self.tokens.append((31, value))
 
                 #Identifiers
                 
@@ -63,8 +63,8 @@ class Tokenizer:
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
                         i += 1
-                    self.tokens.append((32, id))
                     dumb = self.dumbChecker(dumb, id)
+                    self.tokens.append((32, id))
 
                 #Keywords & reserved words
 
@@ -78,8 +78,8 @@ class Tokenizer:
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
                                 continue
-                            self.tokens.append((dict[token], token))
                             dumb = self.dumbChecker(dumb, token)
+                            self.tokens.append((dict[token], token))
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
