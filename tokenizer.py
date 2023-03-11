@@ -1,4 +1,3 @@
-import sys
 from dictionary import dict
 
 class Tokenizer:
@@ -94,14 +93,3 @@ class Tokenizer:
             return False
         else :
             raise ValueError("Invalid whitespace at token: \"%s\"" % token)
-
-if __name__ == '__main__':
-    input_file_name = "debug.txt"
-    if len(sys.argv) > 1:
-        input_file_name = sys.argv[1]
-    tokenizer = Tokenizer(input_file_name)
-    # Create prog node
-    # All nodes import tokenizer functionality
-    # Gettoken, generate app. node, skip token.
-    # Abstract parse tree
-    # Reccommend OO approach
