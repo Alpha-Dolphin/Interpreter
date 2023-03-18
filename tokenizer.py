@@ -5,9 +5,8 @@ class Tokenizer:
     def __init__(self, input_file_name):
         self.currPos = 0
         self.input_file = open(input_file_name, "r")
-        with open(input_file_name) as self.input_file : self.tokenize()
-        for token in self.tokens:
-            print(token)
+        with open(input_file_name) as self.input_file : self.tokenList = self.tokenize()
+        self.currPos = 0
 
     def getToken(self):
         return self.tokens[self.currPos][0]
