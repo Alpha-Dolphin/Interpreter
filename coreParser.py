@@ -15,30 +15,42 @@ class AST :
         def printName(self):
             print(self.name)
         
-        #TODO: Error checking for every type via lookup table for Node Type vs. tokenizer dictionary #
-        #if (AST.tokenizer.getToken != "int") : raise ValueError("Token is not an valid declaration node: \"%s\"" % AST.tokenizer.getToken)
+        def isRightNode(self) :
+            print()
+
+        def throwError(self) :
+            raise ValueError("Error: Position %s - Node Type %s - Token %s", AST.tokenizer.currPos, type(self).__name__, AST.tokenizer.getToken)
 
     class ProgramNode(Node):
         def __init__(self):
             super().__init__()
+            self.isRightNode()
             self.declSeqNode = AST.DeclSeqNode()
+            if (AST.tokenizer.getToken != "begin") : self.throwError()
+            AST.tokenizer.skipToken
             self.stmtSeqNode = AST.StmtSeqNode()
+            if (AST.tokenizer.getToken != "end") : self.throwError()
 
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
+            self.isRightNode()
             self.stmtNode = AST.StmtNode()
-            #TODO: OTL
-            if (True) :
+            if (AST.tokenizer.getToken == 'end') :
+                AST.tokenizer.skipToken
                 self.stmtSeqNode = AST.StmtSeqNode()
+            else :
+                AST.tokenizer.skipToken
 
     class DeclSeqNode(Node):
         def __init__(self):
             super().__init__()
             self.declNode = AST.DeclNode()
-            #TODO: OTL
-            if (True) :
+            if (AST.tokenizer.getToken == ',') :
+                AST.tokenizer.skipToken
                 self.declSeqNode = AST.DeclSeqNode()
+            else :
+                AST.tokenizer.skipToken
 
     class DeclNode(Node):
         def __init__(self):
@@ -48,10 +60,12 @@ class AST :
     class IDListNode(Node):
         def __init__(self):
             super().__init__()
-            self.idNode = AST.DeclNode()
-            #TODO: OTL
-            if (True) :
-                self.declSeqNode = AST.DeclSeqNode()
+            self.idNode = AST.IDNode()
+            if (AST.tokenizer.getToken == ',') :
+                AST.tokenizer.skipToken
+                self.idListNode = AST.IDListNode()
+            else :
+                AST.tokenizer.skipToken
 
     class StmtNode(Node):
         def __init__(self):
@@ -65,17 +79,14 @@ class AST :
         def __init__(self):
             super().__init__()
             self.condNode = AST.CondNode()
-            self.condNode.ParseCond()
             AST.tokenizer.skipToken()
             self.stmtSeqNode1 = AST.StmtSeqNode()
-            self.stmtSeqNode1.ParseSS()
             if AST.tokenizer.getToken() == 'end':
                 AST.tokenizer.skipToken()
                 AST.tokenizer.skipToken()
             else:
                 AST.tokenizer.skipToken()
                 self.stmtSeqNode2 = AST.StmtSeqNode()
-                self.stmtSeqNode2.ParseSS()
 
     class LoopNode(Node):
         def __init__(self):
@@ -105,7 +116,7 @@ class AST :
         def __init__(self):
             super().__init__()
 
-    class IdNode(Node):
+    class IDNode(Node):
         def __init__(self):
             super().__init__()
 
