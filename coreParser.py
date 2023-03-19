@@ -2,78 +2,96 @@ import sys
 from tokenizer import Tokenizer
 
 class AST :
+
     def __init__(self, program_file_name, input_file_name):
-        self.tokenizer = Tokenizer(program_file_name)
-        #TODO : Make this a delimited list
-        self.inputList = input_file_name
-    
+        AST.tokenizer = Tokenizer(program_file_name)
+        # TODO: Make this a delimited list
+        AST.inputList = input_file_name
+
     class Node:
-        def __init__(self, name):
-            self.name = name
+        def __init__(self):
+            self.name = type(self).__name__
         
-        def printName(self) :
+        def printName(self):
             print(self.name)
 
     class ProgramNode(Node):
         def __init__(self):
-            super().__init__("ProgramNode")
-            self.declSeqNode = None
-            self.stmtSeqNode = None
-
-    class DeclSeqNode(Node):
-        def __init__(self):
-            super().__init__("DeclSeqNode")
+            super().__init__()
+            self.declSeqNode = AST.DeclSeqNode()
+            self.stmtSeqNode = AST.StmtSeqNode()
 
     class StmtSeqNode(Node):
         def __init__(self):
-            super().__init__("StmtSeqNode")
+            super().__init__()
+
+    class DeclSeqNode(Node):
+        def __init__(self):
+            super().__init__()
 
     class DeclNode(Node):
-        def __init__(self, varList):
-            super().__init__("DeclNode")
+        def __init__(self):
+            super().__init__()
 
     class VarListNode(Node):
-        def __init__(self, varName):
-            super().__init__("VarListNode")
+        def __init__(self):
+            super().__init__()
 
     class StmtNode(Node):
-        def __init__(self, name):
-            super().__init__(name)
+        def __init__(self):
+            super().__init__()
 
     class AssignNode(Node):
-        def __init__(self, varName, expNode):
-            super().__init__("AssignNode")
+        def __init__(self):
+            super().__init__()
 
     class IfNode(Node):
-        def __init__(self, condNode, stmtSeqNode1, stmtSeqNode2):
-            super().__init__("IfNode")
-            self.condNode = CondNode(condNode)
+        def __init__(self):
+            super().__init__()
+            self.condNode = AST.CondNode()
             self.condNode.ParseCond()
-            self.tokenizer
-            self.stmtSeqNode1 = StmtSeqNode(stmtSeqNode1)
-            self.stmtSeqNode2 = StmtSeqNode(stmtSeqNode2)
+            AST.tokenizer.skipToken()
+            self.stmtSeqNode1 = AST.StmtSeqNode()
+            self.stmtSeqNode1.ParseSS()
+            if AST.tokenizer.getToken() == 'end':
+                AST.tokenizer.skipToken()
+                AST.tokenizer.skipToken()
+            else:
+                AST.tokenizer.skipToken()
+                self.stmtSeqNode2 = AST.StmtSeqNode()
+                self.stmtSeqNode2.ParseSS()
 
     class LoopNode(Node):
-        def __init__(self, condNode, stmtSeqNode):
-            super().__init__("LoopNode")
+        def __init__(self):
+            super().__init__()
+            self.condNode = AST.CondNode()
+            self.stmtSeqNode = AST.StmtSeqNode()
 
     class InNode(Node):
-        def __init__(self, varList):
-            super().__init__("InNode")
+        def __init__(self):
+            super().__init__()
+            self.varListNode = AST.VarListNode()
 
     class OutNode(Node):
-        def __init__(self, varList):
-            super().__init__("OutNode")
+        def __init__(self):
+            super().__init__()
+            self.varListNode = AST.VarListNode()
 
     class CondNode(Node):
-        def __init__(self, name):
-            super().__init__(name)
+        def __init__(self):
+            super().__init__()
 
     class CompNode(Node):
-        def __init__(self, opNode1, compOpNode, opNode2):
-            super().__init__("CompNode")
+        def __init__(self):
+            super().__init__()
+            self.opNode1 = AST.OpNode()
+            self.opNode2 = AST.OpNode()
 
-    
+    class OpNode(Node):
+        def __init__(self):
+            super().__init__()
+
+
 if __name__ == '__main__':
     program_file_name = "debug.txt"
     input_file_name = "input.txt"
