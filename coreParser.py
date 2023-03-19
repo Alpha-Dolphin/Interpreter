@@ -24,16 +24,24 @@ class AST :
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
+            self.stmtNode = AST.StmtNode()
+            #TODO: OTL
+            if (True) :
+                self.stmtSeqNode = AST.StmtSeqNode()
 
     class DeclSeqNode(Node):
         def __init__(self):
             super().__init__()
+            self.declNode = AST.DeclNode()
+            #TODO: OTL
+            if (True) :
+                self.declSeqNode = AST.DeclSeqNode()
 
     class DeclNode(Node):
         def __init__(self):
             super().__init__()
 
-    class VarListNode(Node):
+    class IDListNode(Node):
         def __init__(self):
             super().__init__()
 
@@ -70,12 +78,10 @@ class AST :
     class InNode(Node):
         def __init__(self):
             super().__init__()
-            self.varListNode = AST.VarListNode()
 
     class OutNode(Node):
         def __init__(self):
             super().__init__()
-            self.varListNode = AST.VarListNode()
 
     class CondNode(Node):
         def __init__(self):
@@ -84,8 +90,6 @@ class AST :
     class CompNode(Node):
         def __init__(self):
             super().__init__()
-            self.opNode1 = AST.OpNode()
-            self.opNode2 = AST.OpNode()
 
     class OpNode(Node):
         def __init__(self):
