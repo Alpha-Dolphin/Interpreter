@@ -14,6 +14,9 @@ class AST :
         
         def printName(self):
             print(self.name)
+        
+        #TODO: Error checking for every type via lookup table for Node Type vs. tokenizer dictionary #
+        #if (AST.tokenizer.getToken != "int") : raise ValueError("Token is not an valid declaration node: \"%s\"" % AST.tokenizer.getToken)
 
     class ProgramNode(Node):
         def __init__(self):
@@ -40,10 +43,15 @@ class AST :
     class DeclNode(Node):
         def __init__(self):
             super().__init__()
+            self.idList = AST.IDListNode()
 
     class IDListNode(Node):
         def __init__(self):
             super().__init__()
+            self.idNode = AST.DeclNode()
+            #TODO: OTL
+            if (True) :
+                self.declSeqNode = AST.DeclSeqNode()
 
     class StmtNode(Node):
         def __init__(self):
@@ -72,8 +80,6 @@ class AST :
     class LoopNode(Node):
         def __init__(self):
             super().__init__()
-            self.condNode = AST.CondNode()
-            self.stmtSeqNode = AST.StmtSeqNode()
 
     class InNode(Node):
         def __init__(self):
@@ -92,6 +98,18 @@ class AST :
             super().__init__()
 
     class OpNode(Node):
+        def __init__(self):
+            super().__init__()
+
+    class CompOpNode(Node):
+        def __init__(self):
+            super().__init__()
+
+    class IdNode(Node):
+        def __init__(self):
+            super().__init__()
+
+    class IntNode(Node):
         def __init__(self):
             super().__init__()
 
