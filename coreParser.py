@@ -36,15 +36,15 @@ class AST :
                 or AST.tokenizer.getToken() >= 33: \
                 self.throwError()
 
-        def throwError(self) :
-            raise ValueError("Error: Position %s - Node Type %s - Token %s" % \
-            (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
+        def throwError(self, token) :
+            raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tEncountered Token - %s\n\tTokenizer Token - %s" % \
+            (AST.tokenizer.currPos, type(self).__name__, token, str(AST.tokenizer.getToken())))
   
         def isTokenPresent(self, token: str) -> bool:
             return True if (AST.tokenizer.getToken() == tokenDict[token]) else False
         
         def handleSuperflousToken(self, token: str) -> None:
-            self.throwError() if (AST.tokenizer.getToken() != tokenDict[token]) else AST.tokenizer.skipToken()
+            self.throwError(token) if (AST.tokenizer.getToken() != tokenDict[token]) else AST.tokenizer.skipToken()
         
         def getConsume(self) -> int :
             val = AST.tokenizer.getToken()
@@ -97,6 +97,7 @@ class AST :
         def prettyPrint(self, ind) :
             ind += 1
             self.stmt.prettyPrint(ind)
+            if self.stmtSeq is not None: self.stmtSeq.prettyPrint(ind)
             ind -= 1
 
     class DeclNode(Node):
@@ -219,6 +220,7 @@ class AST :
         def __init__(self):
             super().__init__()
             self.name = AST.tokenizer.idName()
+            self.getConsume()
             self.getConsume()
         #TODO: Need two methods for creating identifiers vs refering to existing identifiers
 
