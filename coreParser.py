@@ -85,6 +85,7 @@ class AST :
             self.isRightNode
             self.idNode = AST.IDNode
             self.isRightTokenError("=")
+            self.expNode = AST.ExpNode
 
     class IfNode(Node):
         def __init__(self):
@@ -118,6 +119,14 @@ class AST :
             super().__init__()
 
     class CompNode(Node):
+        def __init__(self):
+            super().__init__()
+
+    class ExpNode(Node):
+        def __init__(self):
+            super().__init__()
+
+    class FacNode(Node):
         def __init__(self):
             super().__init__()
 
