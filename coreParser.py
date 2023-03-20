@@ -52,7 +52,13 @@ class AST :
             self.stmtSeq = AST.StmtSeqNode()
             self.handleSuperflousToken('end')
 
-        def prettyPrint(self) :
+        def prettyPrint(self, ind) :
+            ind += 1
+            self.indentPrint("begin", ind)
+            self.declSeq.prettyPrint(ind)
+            self.stmtSeq.prettyPrint(ind)
+            self.indentPrint("end", ind)
+            ind -= 1
             
     class StmtSeqNode(Node):
         def __init__(self):
