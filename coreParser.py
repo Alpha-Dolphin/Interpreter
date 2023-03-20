@@ -38,6 +38,11 @@ class AST :
             val = AST.tokenizer.getToken()
             AST.tokenizer.skipToken
             return val
+        
+        def indentPrint(self, indent, str) :
+            x = 0
+            while (x < indent) : print("    ")
+            print("%s\n", str)
 
     class ProgramNode(Node):
         def __init__(self):
@@ -47,6 +52,8 @@ class AST :
             self.stmtSeq = AST.StmtSeqNode()
             self.handleSuperflousToken('end')
 
+        def prettyPrint(self) :
+            
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
