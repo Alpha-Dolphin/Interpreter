@@ -1,4 +1,4 @@
-dict = {
+tokenDict = {
     'program': 1,
     'begin': 2,
     'end': 3,
