@@ -26,10 +26,10 @@ class AST :
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
   
-        def isTokenPresent(self, token) -> bool:
+        def isTokenPresent(self, token: str) -> bool:
             return True if (AST.tokenizer.getToken() == tokenDict[token]) else False
         
-        def handleSuperflousToken(self, token) -> None:
+        def handleSuperflousToken(self, token: str) -> None:
             self.throwError() if (AST.tokenizer.getToken() != tokenDict[token]) else AST.tokenizer.skipToken()
 
     class ProgramNode(Node):
@@ -172,6 +172,7 @@ class AST :
             super().__init__()
             self.name = AST.tokenizer.idName()
             AST.tokenizer.skipToken()
+        #Need two methods for creating identifiers vs refering to existing identifiers
 
     class IntNode(Node):
         def __init__(self):
