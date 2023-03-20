@@ -4,6 +4,8 @@ from dictionary import tokenDict
 
 class AST :
 
+    #AST Methods
+
     def __init__(self, program_file_name, input_file_name):
         AST.tokenizer = Tokenizer(program_file_name)
         # TODO: Make this a delimited list
@@ -14,7 +16,9 @@ class AST :
         self.treeBase.prettyPrint(0)
 
     def exec(self) :
-        self.treeBase.exec
+        self.treeBase.exec()
+
+    #Node parent class
 
     class Node:
         def __init__(self):
@@ -51,6 +55,8 @@ class AST :
             x = 0
             while (x < indent) : print("    ")
             print("%s\n", str)
+
+    #Node subclasses
 
     class ProgramNode(Node):
         def __init__(self):
