@@ -98,9 +98,9 @@ class AST :
             self.stmtSeq1 = AST.StmtSeqNode()
             if self.isTokenPresent('else'):
                 AST.tokenizer.skipToken()
+                self.stmtSeq2 = AST.StmtSeqNode()
             else:
                 AST.tokenizer.skipToken()
-                self.stmtSeq2 = AST.StmtSeqNode()
             self.handleSuperflousToken('end')
 
     class LoopNode(Node):
