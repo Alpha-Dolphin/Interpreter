@@ -11,10 +11,11 @@ class AST :
 
     class Node:
         def __init__(self):
-            self.name = type(self).__name__
-        
+            #Abstract behavior to non-init method to allow to other calls when neccessary
+            self.isRightNode
+
         def printName(self):
-            print(self.name)
+            print(type(self).__name__)
         
         def isRightNode(self) :
             print()
@@ -23,16 +24,15 @@ class AST :
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
   
-        def isRightToken(self, token) :
+        def isRightToken(self, token) -> bool:
             return True if (AST.tokenizer.getToken == tokenDict[token]) else False
         
-        def isRightTokenError(self, token) :
+        def isRightTokenError(self, token) -> None:
             if (AST.tokenizer.getToken != tokenDict[token]) : self.throwError()
 
     class ProgramNode(Node):
         def __init__(self):
             super().__init__()
-            self.isRightNode()
             self.declSeqNode = AST.DeclSeqNode()
             self.isRightTokenError('begin')
             AST.tokenizer.skipToken
@@ -42,7 +42,6 @@ class AST :
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
-            self.isRightNode()
             self.stmtNode = AST.StmtNode()
             if self.isRightToken('end') :
                 AST.tokenizer.skipToken
@@ -63,6 +62,7 @@ class AST :
     class DeclNode(Node):
         def __init__(self):
             super().__init__()
+            self.isRightTokenError('int')
             self.idList = AST.IDListNode()
 
     class IDListNode(Node):
