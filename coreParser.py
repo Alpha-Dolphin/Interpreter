@@ -30,7 +30,8 @@ class AST :
                 self.throwError()
 
         def throwError(self) :
-            raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
+            raise ValueError("Error: Position %s - Node Type %s - Token %s" % \
+            (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
   
         def isTokenPresent(self, token: str) -> bool:
             return True if (AST.tokenizer.getToken() == tokenDict[token]) else False
@@ -51,6 +52,7 @@ class AST :
     class ProgramNode(Node):
         def __init__(self):
             super().__init__()
+            self.handleSuperflousToken('program')
             self.declSeq = AST.DeclSeqNode()
             self.handleSuperflousToken('begin')
             self.stmtSeq = AST.StmtSeqNode()
@@ -58,12 +60,23 @@ class AST :
 
         def prettyPrint(self, ind) :
             ind += 1
-            self.indentPrint("begin", ind)
+            self.indentPrint("program", ind)
             self.declSeq.prettyPrint(ind)
+            self.indentPrint("begin", ind)
             self.stmtSeq.prettyPrint(ind)
             self.indentPrint("end", ind)
             ind -= 1
-            
+               
+    class DeclSeqNode(Node):
+        def __init__(self):
+            super().__init__()
+            self.decl = AST.DeclNode()
+            if self.isTokenPresent(',') :
+                AST.tokenizer.skipToken()
+                self.declSeq = AST.DeclSeqNode()
+            else :
+                AST.tokenizer.skipToken()
+
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
@@ -74,15 +87,10 @@ class AST :
             else :
                 AST.tokenizer.skipToken()
 
-    class DeclSeqNode(Node):
-        def __init__(self):
-            super().__init__()
-            self.decl = AST.DeclNode()
-            if self.isTokenPresent(',') :
-                AST.tokenizer.skipToken()
-                self.declSeq = AST.DeclSeqNode()
-            else :
-                AST.tokenizer.skipToken()
+        def prettyPrint(self, ind) :
+            ind += 1
+            self.stmt.prettyPrint(ind)
+            ind -= 1
 
     class DeclNode(Node):
         def __init__(self):
@@ -198,20 +206,20 @@ class AST :
         def __init__(self):
             super().__init__()
             self.operator = AST.tokenizer.getToken()
-            AST.tokenizer.skipToken()
+            self.getConsume()
 
     class IDNode(Node):
         def __init__(self):
             super().__init__()
             self.name = AST.tokenizer.idName()
-            AST.tokenizer.skipToken()
+            self.getConsume()
         #TODO: Need two methods for creating identifiers vs refering to existing identifiers
 
     class IntNode(Node):
         def __init__(self):
             super().__init__()
             self.value = AST.tokenizer.intVal()
-            AST.tokenizer.skipToken()
+            self.getConsume()
 
 if __name__ == '__main__':
     program_file_name = "debug.txt"
