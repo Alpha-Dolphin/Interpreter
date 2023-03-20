@@ -53,7 +53,9 @@ class AST :
         
         def indentPrint(self, indent, str) :
             x = 0
-            while (x < indent) : print("    ")
+            while (x < indent) : 
+                print("    ")
+                x += 1
             print("%s\n", str)
 
     #Node subclasses
