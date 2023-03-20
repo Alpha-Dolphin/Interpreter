@@ -33,6 +33,11 @@ class AST :
         
         def handleSuperflousToken(self, token: str) -> None:
             self.throwError() if (AST.tokenizer.getToken() != tokenDict[token]) else AST.tokenizer.skipToken()
+        
+        def getConsume(self) -> int :
+            val = AST.tokenizer.getToken()
+            AST.tokenizer.skipToken
+            return val
 
     class ProgramNode(Node):
         def __init__(self):
@@ -73,7 +78,7 @@ class AST :
             super().__init__()
             self.id = AST.IDNode()
             if self.isTokenPresent(',') :
-                AST.tokenizer.skipToken()
+                self.getConsume()
                 self.idList = AST.IDListNode()
             else :
                 AST.tokenizer.skipToken()
@@ -81,6 +86,11 @@ class AST :
     class StmtNode(Node):
         def __init__(self):
             super().__init__()
+            if (self.isTokenPresent("if")) : self.child = AST.IfNode()
+            elif (self.isTokenPresent("while")) : self.child = AST.LoopNode()
+            elif (self.isTokenPresent("read")) : self.child = AST.InNode()
+            elif (self.isTokenPresent("write")) : self.child = AST.OutNode()
+            else : self.child = AST.AssignNode()
 
     class AssignNode(Node):
         def __init__(self):
@@ -97,10 +107,9 @@ class AST :
             self.handleSuperflousToken('then')
             self.stmtSeq1 = AST.StmtSeqNode()
             if self.isTokenPresent('else'):
-                AST.tokenizer.skipToken()
+                self.getConsume()
                 self.stmtSeq2 = AST.StmtSeqNode()
-            else:
-                AST.tokenizer.skipToken()
+            else: self.getConsume()
             self.handleSuperflousToken('end')
 
     class LoopNode(Node):
@@ -127,6 +136,14 @@ class AST :
     class CondNode(Node):
         def __init__(self):
             super().__init__()
+            if self.isTokenPresent("[") :
+                self.handleSuperflousToken("[")
+                self.cond1 = AST.CondNode()
+                self.logOp = self.getConsume()
+                self.cond2 = AST.CondNode()
+            else :
+                if AST.tokenizer.getToken == "!" : self.notChild = self.getConsume()
+                self.cond1 = AST.CondNode()
 
     class CompNode(Node):
         def __init__(self):
@@ -141,11 +158,8 @@ class AST :
         def __init__(self):
             super().__init__()
             self.fac = AST.FacNode()
-            if (self.isTokenPresent("+")) :
-                self.handleSuperflousToken("+")
-                self.exp = AST.ExpNode()
-            if (self.isTokenPresent("-")) :
-                self.handleSuperflousToken("-")
+            if (self.isTokenPresent("+") or self.isTokenPresent("-")) :
+                self.mathOp = self.getConsume()
                 self.exp = AST.ExpNode()
 
     class FacNode(Node):
