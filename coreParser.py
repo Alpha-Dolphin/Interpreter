@@ -13,9 +13,6 @@ class AST :
         def __init__(self):
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
-
-        def printName(self):
-            print(type(self).__name__)
         
         def isRightNode(self) :
             if (AST.tokenizer.getToken() <= 30 and \
