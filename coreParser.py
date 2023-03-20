@@ -18,10 +18,10 @@ class AST :
             if (AST.tokenizer.getToken() <= 30 and \
                 AST.tokenizer.getTokenName() not in type(self).__name__ ) or \
                 (AST.tokenizer.getToken() == 31 and \
-                not type(self).__name__ is AST.IntNode) or \
-                (AST.tokenizer.getToken() == 32 and not type(self).__name__ is AST.IDNode) \
+                not type(self).__name__ is AST.IntNode()) or \
+                (AST.tokenizer.getToken() == 32 and not type(self).__name__ is AST.IDNode()) \
                 or AST.tokenizer.getToken() >= 33: \
-                self.throwError
+                self.throwError()
 
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
@@ -138,7 +138,7 @@ class AST :
     class ExpNode(Node):
         def __init__(self):
             super().__init__()
-            self.fac = AST.FacNode
+            self.fac = AST.FacNode()
             if (self.isTokenPresent("+")) :
                 self.handleSuperflousToken("+")
                 self.exp = AST.ExpNode()
@@ -149,7 +149,7 @@ class AST :
     class FacNode(Node):
         def __init__(self):
             super().__init__()
-            self.opNode = AST.OpNode
+            self.opNode = AST.OpNode()
             if (self.isTokenPresent("*")) :
                 self.handleSuperflousToken("*")
                 self.fac = AST.FacNode()
@@ -157,8 +157,8 @@ class AST :
     class OpNode(Node):
         def __init__(self):
             super().__init__()
-            if AST.tokenizer.getToken == 31 : self.child = AST.IntNode()
-            elif AST.tokenizer.getToken == 32 : self.child = AST.IDNode()
+            if AST.tokenizer.getToken() == 31 : self.child = AST.IntNode()
+            elif AST.tokenizer.getToken() == 32 : self.child = AST.IDNode()
             else : self.child = AST.ExpNode()
     
     class CompOpNode(Node):
