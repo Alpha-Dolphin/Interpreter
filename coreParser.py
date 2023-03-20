@@ -1,5 +1,6 @@
 import sys
 from tokenizer import Tokenizer
+from dictionary import tokenDict
 
 class AST :
 
@@ -17,26 +18,33 @@ class AST :
         
         def isRightNode(self) :
             print()
+            #TODO
 
         def throwError(self) :
-            raise ValueError("Error: Position %s - Node Type %s - Token %s", AST.tokenizer.currPos, type(self).__name__, AST.tokenizer.getToken)
+            raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
+  
+        def isRightToken(self, token) :
+            return True if (AST.tokenizer.getToken == tokenDict[token]) else False
+        
+        def isRightTokenError(self, token) :
+            if (AST.tokenizer.getToken != tokenDict[token]) : self.throwError()
 
     class ProgramNode(Node):
         def __init__(self):
             super().__init__()
             self.isRightNode()
             self.declSeqNode = AST.DeclSeqNode()
-            if (AST.tokenizer.getToken != "begin") : self.throwError()
+            self.isRightTokenError('begin')
             AST.tokenizer.skipToken
             self.stmtSeqNode = AST.StmtSeqNode()
-            if (AST.tokenizer.getToken != "end") : self.throwError()
+            self.isRightTokenError('end')
 
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
             self.isRightNode()
             self.stmtNode = AST.StmtNode()
-            if (AST.tokenizer.getToken == 'end') :
+            if self.isRightToken('end') :
                 AST.tokenizer.skipToken
                 self.stmtSeqNode = AST.StmtSeqNode()
             else :
@@ -46,7 +54,7 @@ class AST :
         def __init__(self):
             super().__init__()
             self.declNode = AST.DeclNode()
-            if (AST.tokenizer.getToken == ',') :
+            if self.isRightToken(',') :
                 AST.tokenizer.skipToken
                 self.declSeqNode = AST.DeclSeqNode()
             else :
@@ -61,7 +69,7 @@ class AST :
         def __init__(self):
             super().__init__()
             self.idNode = AST.IDNode()
-            if (AST.tokenizer.getToken == ',') :
+            if self.isRightToken(',') :
                 AST.tokenizer.skipToken
                 self.idListNode = AST.IDListNode()
             else :
@@ -74,19 +82,24 @@ class AST :
     class AssignNode(Node):
         def __init__(self):
             super().__init__()
+            self.isRightNode
+            self.idNode = AST.IDNode
+            self.isRightTokenError("=")
 
     class IfNode(Node):
         def __init__(self):
             super().__init__()
             self.condNode = AST.CondNode()
+            self.isRightTokenError('if')
             AST.tokenizer.skipToken()
             self.stmtSeqNode1 = AST.StmtSeqNode()
-            if AST.tokenizer.getToken() == 'end':
+            if self.isRightToken('else'):
                 AST.tokenizer.skipToken()
                 AST.tokenizer.skipToken()
             else:
                 AST.tokenizer.skipToken()
                 self.stmtSeqNode2 = AST.StmtSeqNode()
+            self.isRightTokenError('end')
 
     class LoopNode(Node):
         def __init__(self):
@@ -123,7 +136,6 @@ class AST :
     class IntNode(Node):
         def __init__(self):
             super().__init__()
-
 
 if __name__ == '__main__':
     program_file_name = "debug.txt"
