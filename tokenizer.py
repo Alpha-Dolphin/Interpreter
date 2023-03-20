@@ -11,9 +11,6 @@ class Tokenizer:
     def getToken(self):
         return self.tokens[self.currPos][0]
     
-    def getTokenName(self):
-        return self.tokens[self.currPos][1]
-    
     def idName(self):
         #Python doesn't allow exception raises in ternaries, what a rip off
         if self.tokens[self.currPos][0] == 32:
