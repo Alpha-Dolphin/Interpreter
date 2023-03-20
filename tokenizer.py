@@ -9,23 +9,23 @@ class Tokenizer:
         with open(input_file_name) as self.input_file : self.tokenize()
 
     def getToken(self):
-        return self.tokens[self.currPos][0]
+        return self.tokenList[self.currPos][0]
     
     def idName(self):
         #Python doesn't allow exception raises in ternaries, what a rip off
-        if self.tokens[self.currPos][0] == 32:
-            return self.tokens[self.currPos][1]
+        if self.tokenList[self.currPos][0] == 32:
+            return self.tokenList[self.currPos][1]
         else:
-            raise ValueError("Token is not an identifier: \"%s\"" % self.tokens[self.currPos][1])
+            raise ValueError("Token is not an identifier: \"%s\"" % self.tokenList[self.currPos][1])
 
     def intVal(self):
-        if self.tokens[self.currPos][0] == 31:
-            return self.tokens[self.currPos][1]
+        if self.tokenList[self.currPos][0] == 31:
+            return self.tokenList[self.currPos][1]
         else:
-            raise ValueError("Token is not an integer: \"%s\"" % self.tokens[self.currPos][1])
+            raise ValueError("Token is not an integer: \"%s\"" % self.tokenList[self.currPos][1])
 
     def skipToken(self):
-        if (self.currPos < len(self.tokens) and self.tokens[self.currPos][0] < 33) :
+        if (self.currPos < len(self.tokenList) and self.tokenList[self.currPos][0] < 33) :
             self.currPos += 1
 
     def tokenize(self):
