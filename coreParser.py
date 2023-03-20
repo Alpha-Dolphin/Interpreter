@@ -18,8 +18,8 @@ class AST :
             print(type(self).__name__)
         
         def isRightNode(self) :
-            print()
-            #TODO
+            if (AST.tokenizer.getToken() < 30) :
+                if tokenDict[AST.tokenizer.getToken()] not in type(self).__name__
 
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
