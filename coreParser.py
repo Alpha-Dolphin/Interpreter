@@ -13,6 +13,9 @@ class AST :
     def prettyPrint(self) :
         self.treeBase.prettyPrint(0)
 
+    def exec(self) :
+        self.treeBase.exec
+
     class Node:
         def __init__(self):
             #Abstract behavior to non-init method to allow to other calls when neccessary
