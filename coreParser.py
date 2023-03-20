@@ -8,6 +8,10 @@ class AST :
         AST.tokenizer = Tokenizer(program_file_name)
         # TODO: Make this a delimited list
         AST.inputList = input_file_name
+        self.treeBase = AST.ProgramNode()
+
+    def prettyPrint(self) :
+        self.treeBase.prettyPrint(0)
 
     class Node:
         def __init__(self):
