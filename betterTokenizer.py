@@ -1,4 +1,4 @@
-from dictionary import dict
+from dictionary import tokenDict
 from tokenizer import Tokenizer
 
 class BetterTokenizer(Tokenizer):
@@ -41,12 +41,12 @@ class BetterTokenizer(Tokenizer):
                     while i < len(currLine) :
                         token += currLine[i]
                         i += 1
-                        if (token in dict):
+                        if (token in tokenDict):
                             #len(token) == 1 check for effeciency as most tokens are > 1 len
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
                                 continue
-                            self.tokens.append((dict[token], token))
+                            self.tokens.append((tokenDict[token], token))
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
