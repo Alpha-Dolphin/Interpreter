@@ -18,8 +18,12 @@ class AST :
             print(type(self).__name__)
         
         def isRightNode(self) :
-            if (AST.tokenizer.getToken() < 30) :
-                if tokenDict[AST.tokenizer.getToken()] not in type(self).__name__
+            if (AST.tokenizer.getToken() <= 30 and \
+                AST.tokenizer.getTokenName() not in type(self).__name__ ) or \
+                (AST.tokenizer.getToken() == 31 and \
+                not type(self).__name__ is AST.IntNode) or \
+                (not type(self).__name__ is AST.IDNode): \
+                self.throwError
 
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
@@ -88,11 +92,11 @@ class AST :
     class IfNode(Node):
         def __init__(self):
             super().__init__()
-            self.cond = AST.CondNode()
             self.handleSuperflousToken('if')
+            self.cond = AST.CondNode()
+            self.handleSuperflousToken('then')
             self.stmtSeq1 = AST.StmtSeqNode()
             if self.isTokenPresent('else'):
-                AST.tokenizer.skipToken()
                 AST.tokenizer.skipToken()
             else:
                 AST.tokenizer.skipToken()
@@ -127,30 +131,55 @@ class AST :
     class CompNode(Node):
         def __init__(self):
             super().__init__()
+            self.handleSuperflousToken("(")
+            self.op1 = AST.OpNode
+            self.compOp = AST.CompOpNode
+            self.op2 = AST.OpNode
+            self.handleSuperflousToken(")")
 
     class ExpNode(Node):
         def __init__(self):
             super().__init__()
+            self.fac = AST.FacNode
+            if (self.isTokenPresent("+")) :
+                self.handleSuperflousToken("+")
+                self.exp = AST.ExpNode
+            if (self.isTokenPresent("-")) :
+                self.handleSuperflousToken("-")
+                self.exp = AST.ExpNode
 
     class FacNode(Node):
         def __init__(self):
             super().__init__()
+            self.opNode = AST.OpNode
+            if (self.isTokenPresent("*")) :
+                self.handleSuperflousToken("*")
+                self.fac = AST.FacNode
 
     class OpNode(Node):
         def __init__(self):
             super().__init__()
-
+            if AST.tokenizer.getToken == 31 : self.child = AST.IntNode
+            elif AST.tokenizer.getToken == 32 : self.child = AST.IDNode
+            else : self.child = AST.ExpNode
+    
     class CompOpNode(Node):
         def __init__(self):
             super().__init__()
+            self.operator = AST.tokenizer.getToken
+            AST.tokenizer.skipToken
 
     class IDNode(Node):
         def __init__(self):
             super().__init__()
+            self.name = AST.tokenizer.idName
+            AST.tokenizer.skipToken
 
     class IntNode(Node):
         def __init__(self):
             super().__init__()
+            self.value = AST.tokenizer.intVal
+            AST.tokenizer.skipToken
 
 if __name__ == '__main__':
     program_file_name = "debug.txt"
