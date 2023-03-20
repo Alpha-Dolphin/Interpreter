@@ -24,54 +24,53 @@ class AST :
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
   
-        def isRightToken(self, token) -> bool:
+        def isTokenPresent(self, token) -> bool:
             return True if (AST.tokenizer.getToken == tokenDict[token]) else False
         
-        def isRightTokenError(self, token) -> None:
-            if (AST.tokenizer.getToken != tokenDict[token]) : self.throwError()
+        def handleSuperflousToken(self, token) -> None:
+            self.throwError() if (AST.tokenizer.getToken != tokenDict[token]) else AST.tokenizer.skipToken()
 
     class ProgramNode(Node):
         def __init__(self):
             super().__init__()
-            self.declSeqNode = AST.DeclSeqNode()
-            self.isRightTokenError('begin')
-            AST.tokenizer.skipToken
-            self.stmtSeqNode = AST.StmtSeqNode()
-            self.isRightTokenError('end')
+            self.declSeq = AST.DeclSeqNode()
+            self.handleSuperflousToken('begin')
+            self.stmtSeq = AST.StmtSeqNode()
+            self.handleSuperflousToken('end')
 
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
-            self.stmtNode = AST.StmtNode()
-            if self.isRightToken('end') :
+            self.stmt = AST.StmtNode()
+            if self.isTokenPresent('end') :
                 AST.tokenizer.skipToken
-                self.stmtSeqNode = AST.StmtSeqNode()
+                self.stmtSeq = AST.StmtSeqNode()
             else :
                 AST.tokenizer.skipToken
 
     class DeclSeqNode(Node):
         def __init__(self):
             super().__init__()
-            self.declNode = AST.DeclNode()
-            if self.isRightToken(',') :
+            self.decl = AST.DeclNode()
+            if self.isTokenPresent(',') :
                 AST.tokenizer.skipToken
-                self.declSeqNode = AST.DeclSeqNode()
+                self.declSeq = AST.DeclSeqNode()
             else :
                 AST.tokenizer.skipToken
 
     class DeclNode(Node):
         def __init__(self):
             super().__init__()
-            self.isRightTokenError('int')
+            self.handleSuperflousToken('int')
             self.idList = AST.IDListNode()
 
     class IDListNode(Node):
         def __init__(self):
             super().__init__()
-            self.idNode = AST.IDNode()
-            if self.isRightToken(',') :
+            self.id = AST.IDNode()
+            if self.isTokenPresent(',') :
                 AST.tokenizer.skipToken
-                self.idListNode = AST.IDListNode()
+                self.idList = AST.IDListNode()
             else :
                 AST.tokenizer.skipToken
 
@@ -82,37 +81,44 @@ class AST :
     class AssignNode(Node):
         def __init__(self):
             super().__init__()
-            self.isRightNode
-            self.idNode = AST.IDNode
-            self.isRightTokenError("=")
-            self.expNode = AST.ExpNode
+            self.id = AST.IDNode
+            self.handleSuperflousToken("=")
+            self.exp = AST.ExpNode
 
     class IfNode(Node):
         def __init__(self):
             super().__init__()
-            self.condNode = AST.CondNode()
-            self.isRightTokenError('if')
-            AST.tokenizer.skipToken()
-            self.stmtSeqNode1 = AST.StmtSeqNode()
-            if self.isRightToken('else'):
+            self.cond = AST.CondNode()
+            self.handleSuperflousToken('if')
+            self.stmtSeq1 = AST.StmtSeqNode()
+            if self.isTokenPresent('else'):
                 AST.tokenizer.skipToken()
                 AST.tokenizer.skipToken()
             else:
                 AST.tokenizer.skipToken()
-                self.stmtSeqNode2 = AST.StmtSeqNode()
-            self.isRightTokenError('end')
+                self.stmtSeq2 = AST.StmtSeqNode()
+            self.handleSuperflousToken('end')
 
     class LoopNode(Node):
         def __init__(self):
             super().__init__()
+            self.handleSuperflousToken("while")
+            self.cond = AST.CondNode
+            self.handleSuperflousToken("loop")
+            self.stmtSeq = AST.StmtSeqNode
+            self.handleSuperflousToken("end")
 
     class InNode(Node):
         def __init__(self):
             super().__init__()
+            self.handleSuperflousToken("read")
+            self.idList = AST.IDListNode
 
     class OutNode(Node):
         def __init__(self):
             super().__init__()
+            self.handleSuperflousToken("write")
+            self.idList = AST.IDListNode
 
     class CondNode(Node):
         def __init__(self):
@@ -154,8 +160,3 @@ if __name__ == '__main__':
         if len(sys.argv) > 1:
             program_file_name = sys.argv[1]
     ast = AST(program_file_name, input_file_name)
-    # Create prog node
-    # All nodes import tokenizer functionality
-    # Gettoken, generate app. node, skip token.
-    # Abstract parse tree
-    # Reccommend OO approach
