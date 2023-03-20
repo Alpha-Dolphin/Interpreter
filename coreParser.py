@@ -19,17 +19,18 @@ class AST :
                 AST.tokenizer.getTokenName() not in type(self).__name__ ) or \
                 (AST.tokenizer.getToken() == 31 and \
                 not type(self).__name__ is AST.IntNode) or \
-                (not type(self).__name__ is AST.IDNode): \
+                (AST.tokenizer.getToken() == 32 and not type(self).__name__ is AST.IDNode) \
+                or AST.tokenizer.getToken() >= 33: \
                 self.throwError
 
         def throwError(self) :
             raise ValueError("Error: Position %s - Node Type %s - Token %s" % (AST.tokenizer.currPos, type(self).__name__, str(AST.tokenizer.getToken())))
   
         def isTokenPresent(self, token) -> bool:
-            return True if (AST.tokenizer.getToken == tokenDict[token]) else False
+            return True if (AST.tokenizer.getToken() == tokenDict[token]) else False
         
         def handleSuperflousToken(self, token) -> None:
-            self.throwError() if (AST.tokenizer.getToken != tokenDict[token]) else AST.tokenizer.skipToken()
+            self.throwError() if (AST.tokenizer.getToken() != tokenDict[token]) else AST.tokenizer.skipToken()
 
     class ProgramNode(Node):
         def __init__(self):
@@ -44,20 +45,20 @@ class AST :
             super().__init__()
             self.stmt = AST.StmtNode()
             if self.isTokenPresent('end') :
-                AST.tokenizer.skipToken
+                AST.tokenizer.skipToken()
                 self.stmtSeq = AST.StmtSeqNode()
             else :
-                AST.tokenizer.skipToken
+                AST.tokenizer.skipToken()
 
     class DeclSeqNode(Node):
         def __init__(self):
             super().__init__()
             self.decl = AST.DeclNode()
             if self.isTokenPresent(',') :
-                AST.tokenizer.skipToken
+                AST.tokenizer.skipToken()
                 self.declSeq = AST.DeclSeqNode()
             else :
-                AST.tokenizer.skipToken
+                AST.tokenizer.skipToken()
 
     class DeclNode(Node):
         def __init__(self):
@@ -70,10 +71,10 @@ class AST :
             super().__init__()
             self.id = AST.IDNode()
             if self.isTokenPresent(',') :
-                AST.tokenizer.skipToken
+                AST.tokenizer.skipToken()
                 self.idList = AST.IDListNode()
             else :
-                AST.tokenizer.skipToken
+                AST.tokenizer.skipToken()
 
     class StmtNode(Node):
         def __init__(self):
@@ -82,9 +83,9 @@ class AST :
     class AssignNode(Node):
         def __init__(self):
             super().__init__()
-            self.id = AST.IDNode
+            self.id = AST.IDNode()
             self.handleSuperflousToken("=")
-            self.exp = AST.ExpNode
+            self.exp = AST.ExpNode()
 
     class IfNode(Node):
         def __init__(self):
@@ -104,22 +105,22 @@ class AST :
         def __init__(self):
             super().__init__()
             self.handleSuperflousToken("while")
-            self.cond = AST.CondNode
+            self.cond = AST.CondNode()
             self.handleSuperflousToken("loop")
-            self.stmtSeq = AST.StmtSeqNode
+            self.stmtSeq = AST.StmtSeqNode()
             self.handleSuperflousToken("end")
 
     class InNode(Node):
         def __init__(self):
             super().__init__()
             self.handleSuperflousToken("read")
-            self.idList = AST.IDListNode
+            self.idList = AST.IDListNode()
 
     class OutNode(Node):
         def __init__(self):
             super().__init__()
             self.handleSuperflousToken("write")
-            self.idList = AST.IDListNode
+            self.idList = AST.IDListNode()
 
     class CondNode(Node):
         def __init__(self):
@@ -129,9 +130,9 @@ class AST :
         def __init__(self):
             super().__init__()
             self.handleSuperflousToken("(")
-            self.op1 = AST.OpNode
-            self.compOp = AST.CompOpNode
-            self.op2 = AST.OpNode
+            self.op1 = AST.OpNode()
+            self.compOp = AST.CompOpNode()
+            self.op2 = AST.OpNode()
             self.handleSuperflousToken(")")
 
     class ExpNode(Node):
@@ -140,10 +141,10 @@ class AST :
             self.fac = AST.FacNode
             if (self.isTokenPresent("+")) :
                 self.handleSuperflousToken("+")
-                self.exp = AST.ExpNode
+                self.exp = AST.ExpNode()
             if (self.isTokenPresent("-")) :
                 self.handleSuperflousToken("-")
-                self.exp = AST.ExpNode
+                self.exp = AST.ExpNode()
 
     class FacNode(Node):
         def __init__(self):
@@ -151,32 +152,32 @@ class AST :
             self.opNode = AST.OpNode
             if (self.isTokenPresent("*")) :
                 self.handleSuperflousToken("*")
-                self.fac = AST.FacNode
+                self.fac = AST.FacNode()
 
     class OpNode(Node):
         def __init__(self):
             super().__init__()
-            if AST.tokenizer.getToken == 31 : self.child = AST.IntNode
-            elif AST.tokenizer.getToken == 32 : self.child = AST.IDNode
-            else : self.child = AST.ExpNode
+            if AST.tokenizer.getToken == 31 : self.child = AST.IntNode()
+            elif AST.tokenizer.getToken == 32 : self.child = AST.IDNode()
+            else : self.child = AST.ExpNode()
     
     class CompOpNode(Node):
         def __init__(self):
             super().__init__()
-            self.operator = AST.tokenizer.getToken
-            AST.tokenizer.skipToken
+            self.operator = AST.tokenizer.getToken()
+            AST.tokenizer.skipToken()
 
     class IDNode(Node):
         def __init__(self):
             super().__init__()
-            self.name = AST.tokenizer.idName
-            AST.tokenizer.skipToken
+            self.name = AST.tokenizer.idName()
+            AST.tokenizer.skipToken()
 
     class IntNode(Node):
         def __init__(self):
             super().__init__()
-            self.value = AST.tokenizer.intVal
-            AST.tokenizer.skipToken
+            self.value = AST.tokenizer.intVal()
+            AST.tokenizer.skipToken()
 
 if __name__ == '__main__':
     program_file_name = "debug.txt"
