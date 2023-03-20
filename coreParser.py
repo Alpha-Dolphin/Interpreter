@@ -52,11 +52,7 @@ class AST :
             return val
         
         def indentPrint(self, indent, str) :
-            x = 0
-            while (x < indent) : 
-                print("    ")
-                x += 1
-            print("%s\n", str)
+            print(" " * indent, str)
 
     #Node subclasses
 
