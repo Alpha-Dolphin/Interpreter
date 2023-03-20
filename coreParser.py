@@ -15,6 +15,8 @@ class AST :
             self.isRightNode
         
         def isRightNode(self) :
+            return True
+            #The if statement needs a lot of work
             if (AST.tokenizer.getToken() <= 30 and \
                 AST.tokenizer.getTokenName() not in type(self).__name__ ) or \
                 (AST.tokenizer.getToken() == 31 and \
