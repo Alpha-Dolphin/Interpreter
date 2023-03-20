@@ -174,7 +174,7 @@ class AST :
             super().__init__()
             self.name = AST.tokenizer.idName()
             AST.tokenizer.skipToken()
-        #Need two methods for creating identifiers vs refering to existing identifiers
+        #TODO: Need two methods for creating identifiers vs refering to existing identifiers
 
     class IntNode(Node):
         def __init__(self):
