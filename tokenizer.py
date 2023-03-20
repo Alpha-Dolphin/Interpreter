@@ -1,12 +1,12 @@
 from dictionary import tokenDict
-
+import sys
 class Tokenizer:
 
     def __init__(self, input_file_name):
         self.currPos = 0
+        self.tokenList = []
         self.input_file = open(input_file_name, "r")
-        with open(input_file_name) as self.input_file : self.tokenList = self.tokenize()
-        self.currPos = 0
+        with open(input_file_name) as self.input_file : self.tokenize()
 
     def getToken(self):
         return self.tokens[self.currPos][0]
@@ -33,7 +33,6 @@ class Tokenizer:
         dumb = True
 
         for currLine in self.input_file :
-            self.tokens = []
             i = 0
             
             while i < len(currLine) :
@@ -52,7 +51,7 @@ class Tokenizer:
                         value = value * 10 + int(currLine[i])
                         i += 1
                     dumb = self.dumbChecker(dumb, value)
-                    self.tokens.append((31, value))
+                    self.tokenList.append((31, value))
 
                 #Identifiers
                 
@@ -62,7 +61,7 @@ class Tokenizer:
                         id += currLine[i]
                         i += 1
                     dumb = self.dumbChecker(dumb, id)
-                    self.tokens.append((32, id))
+                    self.tokenList.append((32, id))
 
                 #Keywords & reserved words
 
@@ -77,13 +76,13 @@ class Tokenizer:
                                 #Could manually append an "=" but this is simplier
                                 continue
                             dumb = self.dumbChecker(dumb, token)
-                            self.tokens.append((tokenDict[token], token))
+                            self.tokenList.append((tokenDict[token], token))
                             break
                         #Check for invalid token
                         elif i < len(currLine) and currLine[i] == " " :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
         #Conventional end of text character
-        self.tokens.append((33, "\x1A"))
+        self.tokenList.append((33, "\x1A"))
 
     def dumbChecker(self, dumb, token) :
         if tokenDict.get(token, -1) in range(12, 31):
@@ -92,3 +91,11 @@ class Tokenizer:
             return False
         else :
             raise ValueError("Invalid whitespace at token: \"%s\"" % token)
+
+if __name__ == '__main__':
+    program_file_name = "debug.txt"
+    if len(sys.argv) > 1:
+        program_file_name = sys.argv[1]
+    tokenizer = Tokenizer(program_file_name)
+    for token in tokenizer.tokenList :
+        print(token)
