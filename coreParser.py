@@ -67,11 +67,11 @@ class AST :
 
         def prettyPrint(self, ind) :
             ind += 1
-            AST.Node.indentPrint(self,"program", ind)
+            super().indentPrint("program", ind)
             self.declSeq.prettyPrint(ind)
-            AST.Node.indentPrint(self,"begin", ind)
+            super().indentPrint("begin", ind)
             self.stmtSeq.prettyPrint(ind)
-            AST.Node.indentPrint(self,"end", ind)
+            super().indentPrint("end", ind)
             ind -= 1
                
     class DeclSeqNode(Node) :
