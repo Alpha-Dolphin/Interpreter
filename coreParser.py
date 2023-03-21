@@ -24,7 +24,7 @@ class AST :
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
         
-        def isRightNode(self) :
+        def isRightNode(self) -> None:
             return
             #The if statement needs a lot of work
             if (AST.tokenizer.getToken() <= 30 and \
@@ -35,7 +35,7 @@ class AST :
                 or AST.tokenizer.getToken() >= 33: \
                 self.throwError()
 
-        def throwError(self, token) :
+        def throwError(self, token) -> None:
             raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
             (AST.tokenizer.currPos, type(self).__name__, token, AST.tokenizer.getTokenName()))
   
@@ -45,12 +45,12 @@ class AST :
         def handleSuperflousToken(self, token: str) -> None:
             self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
         
-        def getConsume(self) -> int :
+        def getConsume(self) -> int:
             val = AST.tokenizer.getToken()
             AST.tokenizer.skipToken()
             return val
         
-        def indentPrint(self, indent, str) :
+        def indentPrint(self, indent, str) -> None:
             print(" " * indent, str)
 
     #Node subclasses
