@@ -1,7 +1,7 @@
 import sys
 from tokenizer import Tokenizer
 
-class AST :
+class AST:
 
     #AST Methods
 
