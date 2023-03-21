@@ -18,6 +18,7 @@ class AST :
         self.treeBase.exec()
 
     #Node parent class
+    #Abstracts out all AST.Tokenizer calls
 
     class Node:
         def __init__(self):
