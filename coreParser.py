@@ -1,6 +1,8 @@
 import sys
 from tokenizer import Tokenizer
 
+DEBUG = True
+
 class AST:
 
     #AST Methods
@@ -44,10 +46,15 @@ class AST:
             return True if (AST.tokenizer.getTokenName() == token) else False
         
         def handleSuperflousToken(self, token: str) -> None:
+            if (DEBUG) : print(token + "\n")
             self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
         
         def getConsume(self) -> int :
             val = AST.tokenizer.getToken()
+            if (DEBUG) : 
+                if (val == 31) : print(str(AST.tokenizer.intVal()) + "\n")
+                elif (val == 32) : print(AST.tokenizer.idName() + "\n")
+                else : print(str(val) + "\n")
             AST.tokenizer.skipToken()
             return val
         
@@ -73,7 +80,10 @@ class AST:
             self.stmtSeq.prettyPrint(ind)
             super().indentPrint("end", ind)
             ind -= 1
-               
+
+        def exec(self) :
+            print("TODO")
+   
     class DeclSeqNode(Node) :
         def __init__(self) :
             super().__init__()
