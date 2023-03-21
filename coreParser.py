@@ -1,6 +1,5 @@
 import sys
 from tokenizer import Tokenizer
-from dictionary import tokenDict
 
 class AST :
 
@@ -41,10 +40,10 @@ class AST :
             (AST.tokenizer.currPos, type(self).__name__, token, AST.tokenizer.getTokenName()))
   
         def isTokenPresent(self, token: str) -> bool:
-            return True if (AST.tokenizer.getToken() == tokenDict[token]) else False
+            return True if (AST.tokenizer.getTokenName() == token) else False
         
         def handleSuperflousToken(self, token: str) -> None:
-            self.throwError(token) if (AST.tokenizer.getToken() != tokenDict[token]) else AST.tokenizer.skipToken()
+            self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
         
         def getConsume(self) -> int :
             val = AST.tokenizer.getToken()
