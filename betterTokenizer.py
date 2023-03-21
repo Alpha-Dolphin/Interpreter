@@ -1,9 +1,9 @@
 from dictionary import tokenDict
 from tokenizer import Tokenizer
 
-class BetterTokenizer(Tokenizer):
+class BetterTokenizer(Tokenizer) :
 
-    def tokenize(self):
+    def tokenize(self) :
 
         for currLine in self.input_file :
                         
@@ -18,7 +18,7 @@ class BetterTokenizer(Tokenizer):
 
                 #Integers
                 
-                elif currLine[i].isdigit():
+                elif currLine[i].isdigit() :
                     value = 0
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
@@ -27,7 +27,7 @@ class BetterTokenizer(Tokenizer):
 
                 #Identifiers
                 
-                elif currLine[i].isupper():
+                elif currLine[i].isupper() :
                     id = ""
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
@@ -41,7 +41,7 @@ class BetterTokenizer(Tokenizer):
                     while i < len(currLine) :
                         token += currLine[i]
                         i += 1
-                        if (token in tokenDict):
+                        if (token in tokenDict) :
                             #len(token) == 1 check for effeciency as most tokens are > 1 len
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
