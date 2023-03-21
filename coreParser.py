@@ -37,8 +37,8 @@ class AST :
                 self.throwError()
 
         def throwError(self, token) :
-            raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tEncountered Token - %s\n\tTokenizer Token - %s" % \
-            (AST.tokenizer.currPos, type(self).__name__, token, str(AST.tokenizer.getToken())))
+            raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
+            (AST.tokenizer.currPos, type(self).__name__, token, AST.tokenizer.getTokenName()))
   
         def isTokenPresent(self, token: str) -> bool:
             return True if (AST.tokenizer.getToken() == tokenDict[token]) else False
@@ -48,7 +48,7 @@ class AST :
         
         def getConsume(self) -> int :
             val = AST.tokenizer.getToken()
-            AST.tokenizer.skipToken
+            AST.tokenizer.skipToken()
             return val
         
         def indentPrint(self, indent, str) :
@@ -78,21 +78,15 @@ class AST :
         def __init__(self):
             super().__init__()
             self.decl = AST.DeclNode()
-            if self.isTokenPresent(',') :
-                AST.tokenizer.skipToken()
+            if self.isTokenPresent('int') :
                 self.declSeq = AST.DeclSeqNode()
-            else :
-                AST.tokenizer.skipToken()
 
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
             self.stmt = AST.StmtNode()
-            if self.isTokenPresent('end') :
-                AST.tokenizer.skipToken()
+            if not self.isTokenPresent('end') :
                 self.stmtSeq = AST.StmtSeqNode()
-            else :
-                AST.tokenizer.skipToken()
 
         def prettyPrint(self, ind) :
             ind += 1
@@ -105,16 +99,15 @@ class AST :
             super().__init__()
             self.handleSuperflousToken('int')
             self.idList = AST.IDListNode()
+            self.handleSuperflousToken(';')
 
     class IDListNode(Node):
         def __init__(self):
             super().__init__()
             self.id = AST.IDNode()
             if self.isTokenPresent(',') :
-                self.getConsume()
+                self.handleSuperflousToken(',')
                 self.idList = AST.IDListNode()
-            else :
-                AST.tokenizer.skipToken()
 
     class StmtNode(Node):
         def __init__(self):
@@ -124,6 +117,7 @@ class AST :
             elif (self.isTokenPresent("read")) : self.child = AST.InNode()
             elif (self.isTokenPresent("write")) : self.child = AST.OutNode()
             else : self.child = AST.AssignNode()
+            self.handleSuperflousToken(';')
 
     class AssignNode(Node):
         def __init__(self):
@@ -175,8 +169,8 @@ class AST :
                 self.logOp = self.getConsume()
                 self.cond2 = AST.CondNode()
             else :
-                if AST.tokenizer.getToken == "!" : self.notChild = self.getConsume()
-                self.cond1 = AST.CondNode()
+                if self.isTokenPresent("!") : self.notChild = self.getConsume()
+                self.cond1 = AST.CompNode()
 
     class CompNode(Node):
         def __init__(self):
@@ -220,7 +214,6 @@ class AST :
         def __init__(self):
             super().__init__()
             self.name = AST.tokenizer.idName()
-            self.getConsume()
             self.getConsume()
         #TODO: Need two methods for creating identifiers vs refering to existing identifiers
 
