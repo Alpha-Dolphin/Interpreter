@@ -1,11 +1,13 @@
 import sys
 from tokenizer import Tokenizer
 
-class AST :
+DEBUG = True
+
+class AST:
 
     #AST Methods
 
-    def __init__(self, program_file_name, input_file_name):
+    def __init__(self, program_file_name, input_file_name) :
         AST.tokenizer = Tokenizer(program_file_name)
         # TODO: Make this a delimited list
         AST.inputList = input_file_name
@@ -18,9 +20,10 @@ class AST :
         self.treeBase.exec()
 
     #Node parent class
+    #Abstracts out all AST.Tokenizer calls
 
     class Node:
-        def __init__(self):
+        def __init__(self) :
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
         
@@ -43,10 +46,15 @@ class AST :
             return True if (AST.tokenizer.getTokenName() == token) else False
         
         def handleSuperflousToken(self, token: str) -> None:
+            if (DEBUG) : print(token + "\n")
             self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
         
         def getConsume(self) -> int:
             val = AST.tokenizer.getToken()
+            if (DEBUG) : 
+                if (val == 31) : print(str(AST.tokenizer.intVal()) + "\n")
+                elif (val == 32) : print(AST.tokenizer.idName() + "\n")
+                else : print(str(val) + "\n")
             AST.tokenizer.skipToken()
             return val
         
@@ -55,36 +63,39 @@ class AST :
 
     #Node subclasses
 
-    class ProgramNode(Node):
-        def __init__(self):
+    class ProgramNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken('program')
+            super().handleSuperflousToken('program')
             self.declSeq = AST.DeclSeqNode()
-            self.handleSuperflousToken('begin')
+            super().handleSuperflousToken('begin')
             self.stmtSeq = AST.StmtSeqNode()
-            self.handleSuperflousToken('end')
+            super().handleSuperflousToken('end')
 
         def prettyPrint(self, ind) :
             ind += 1
-            self.indentPrint("program", ind)
+            super().indentPrint("program", ind)
             self.declSeq.prettyPrint(ind)
-            self.indentPrint("begin", ind)
+            super().indentPrint("begin", ind)
             self.stmtSeq.prettyPrint(ind)
-            self.indentPrint("end", ind)
+            super().indentPrint("end", ind)
             ind -= 1
-               
-    class DeclSeqNode(Node):
-        def __init__(self):
+
+        def exec(self) :
+            print("TODO")
+   
+    class DeclSeqNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.decl = AST.DeclNode()
-            if self.isTokenPresent('int') :
+            if super().isTokenPresent('int') :
                 self.declSeq = AST.DeclSeqNode()
 
-    class StmtSeqNode(Node):
-        def __init__(self):
+    class StmtSeqNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.stmt = AST.StmtNode()
-            if not self.isTokenPresent('end') :
+            if not super().isTokenPresent('end') :
                 self.stmtSeq = AST.StmtSeqNode()
 
         def prettyPrint(self, ind) :
@@ -93,131 +104,131 @@ class AST :
             if self.stmtSeq is not None: self.stmtSeq.prettyPrint(ind)
             ind -= 1
 
-    class DeclNode(Node):
-        def __init__(self):
+    class DeclNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken('int')
+            super().handleSuperflousToken('int')
             self.idList = AST.IDListNode()
-            self.handleSuperflousToken(';')
+            super().handleSuperflousToken(';')
 
-    class IDListNode(Node):
-        def __init__(self):
+    class IDListNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.id = AST.IDNode()
-            if self.isTokenPresent(',') :
-                self.handleSuperflousToken(',')
+            if super().isTokenPresent(',') :
+                super().handleSuperflousToken(',')
                 self.idList = AST.IDListNode()
 
-    class StmtNode(Node):
-        def __init__(self):
+    class StmtNode(Node) :
+        def __init__(self) :
             super().__init__()
-            if (self.isTokenPresent("if")) : self.child = AST.IfNode()
-            elif (self.isTokenPresent("while")) : self.child = AST.LoopNode()
-            elif (self.isTokenPresent("read")) : self.child = AST.InNode()
-            elif (self.isTokenPresent("write")) : self.child = AST.OutNode()
+            if (super().isTokenPresent("if")) : self.child = AST.IfNode()
+            elif (super().isTokenPresent("while")) : self.child = AST.LoopNode()
+            elif (super().isTokenPresent("read")) : self.child = AST.InNode()
+            elif (super().isTokenPresent("write")) : self.child = AST.OutNode()
             else : self.child = AST.AssignNode()
-            self.handleSuperflousToken(';')
+            super().handleSuperflousToken(';')
 
-    class AssignNode(Node):
-        def __init__(self):
+    class AssignNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.id = AST.IDNode()
-            self.handleSuperflousToken("=")
+            super().handleSuperflousToken("=")
             self.exp = AST.ExpNode()
 
-    class IfNode(Node):
-        def __init__(self):
+    class IfNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken('if')
+            super().handleSuperflousToken('if')
             self.cond = AST.CondNode()
-            self.handleSuperflousToken('then')
+            super().handleSuperflousToken('then')
             self.stmtSeq1 = AST.StmtSeqNode()
-            if self.isTokenPresent('else'):
+            if super().isTokenPresent('else') :
                 self.getConsume()
                 self.stmtSeq2 = AST.StmtSeqNode()
             else: self.getConsume()
-            self.handleSuperflousToken('end')
+            super().handleSuperflousToken('end')
 
-    class LoopNode(Node):
-        def __init__(self):
+    class LoopNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken("while")
+            super().handleSuperflousToken("while")
             self.cond = AST.CondNode()
-            self.handleSuperflousToken("loop")
+            super().handleSuperflousToken("loop")
             self.stmtSeq = AST.StmtSeqNode()
-            self.handleSuperflousToken("end")
+            super().handleSuperflousToken("end")
 
-    class InNode(Node):
-        def __init__(self):
+    class InNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken("read")
+            super().handleSuperflousToken("read")
             self.idList = AST.IDListNode()
 
-    class OutNode(Node):
-        def __init__(self):
+    class OutNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken("write")
+            super().handleSuperflousToken("write")
             self.idList = AST.IDListNode()
 
-    class CondNode(Node):
-        def __init__(self):
+    class CondNode(Node) :
+        def __init__(self) :
             super().__init__()
-            if self.isTokenPresent("[") :
-                self.handleSuperflousToken("[")
+            if super().isTokenPresent("[") :
+                super().handleSuperflousToken("[")
                 self.cond1 = AST.CondNode()
                 self.logOp = self.getConsume()
                 self.cond2 = AST.CondNode()
             else :
-                if self.isTokenPresent("!") : self.notChild = self.getConsume()
+                if super().isTokenPresent("!") : self.notChild = self.getConsume()
                 self.cond1 = AST.CompNode()
 
-    class CompNode(Node):
-        def __init__(self):
+    class CompNode(Node) :
+        def __init__(self) :
             super().__init__()
-            self.handleSuperflousToken("(")
+            super().handleSuperflousToken("(")
             self.op1 = AST.OpNode()
             self.compOp = AST.CompOpNode()
             self.op2 = AST.OpNode()
-            self.handleSuperflousToken(")")
+            super().handleSuperflousToken(")")
 
-    class ExpNode(Node):
-        def __init__(self):
+    class ExpNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.fac = AST.FacNode()
-            if (self.isTokenPresent("+") or self.isTokenPresent("-")) :
+            if (super().isTokenPresent("+") or super().isTokenPresent("-")) :
                 self.mathOp = self.getConsume()
                 self.exp = AST.ExpNode()
 
-    class FacNode(Node):
-        def __init__(self):
+    class FacNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.opNode = AST.OpNode()
-            if (self.isTokenPresent("*")) :
-                self.handleSuperflousToken("*")
+            if (super().isTokenPresent("*")) :
+                super().handleSuperflousToken("*")
                 self.fac = AST.FacNode()
 
-    class OpNode(Node):
-        def __init__(self):
+    class OpNode(Node) :
+        def __init__(self) :
             super().__init__()
             if AST.tokenizer.getToken() == 31 : self.child = AST.IntNode()
             elif AST.tokenizer.getToken() == 32 : self.child = AST.IDNode()
             else : self.child = AST.ExpNode()
     
-    class CompOpNode(Node):
-        def __init__(self):
+    class CompOpNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.operator = AST.tokenizer.getToken()
             self.getConsume()
 
-    class IDNode(Node):
-        def __init__(self):
+    class IDNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.name = AST.tokenizer.idName()
             self.getConsume()
         #TODO: Need two methods for creating identifiers vs refering to existing identifiers
 
-    class IntNode(Node):
-        def __init__(self):
+    class IntNode(Node) :
+        def __init__(self) :
             super().__init__()
             self.value = AST.tokenizer.intVal()
             self.getConsume()

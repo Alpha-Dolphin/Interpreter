@@ -2,7 +2,7 @@ from dictionary import tokenDict
 import sys
 class Tokenizer:
 
-    def __init__(self, input_file_name):
+    def __init__(self, input_file_name) :
         self.currPos = 0
         self.tokenList = []
         self.input_file = open(input_file_name, "r")
@@ -14,24 +14,24 @@ class Tokenizer:
     def getTokenName(self) -> str:
         return self.tokenList[self.currPos][1]
     
-    def idName(self):
+    def idName(self) :
         #Python doesn't allow exception raises in ternaries, what a rip off
         if self.tokenList[self.currPos][0] == 32:
             return self.tokenList[self.currPos][1]
         else:
             raise ValueError("Token is not an identifier: \"%s\"" % self.tokenList[self.currPos][1])
 
-    def intVal(self):
+    def intVal(self) :
         if self.tokenList[self.currPos][0] == 31:
             return self.tokenList[self.currPos][1]
         else:
             raise ValueError("Token is not an integer: \"%s\"" % self.tokenList[self.currPos][1])
 
-    def skipToken(self):
+    def skipToken(self) :
         if (self.currPos < len(self.tokenList) and self.tokenList[self.currPos][0] < 33) :
             self.currPos += 1
 
-    def tokenize(self):
+    def tokenize(self) :
         #This functionality is dumb
         dumb = True
 
@@ -48,7 +48,7 @@ class Tokenizer:
 
                 #Integers
                 
-                elif currLine[i].isdigit():
+                elif currLine[i].isdigit() :
                     value = 0
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
@@ -58,7 +58,7 @@ class Tokenizer:
 
                 #Identifiers
                 
-                elif currLine[i].isupper():
+                elif currLine[i].isupper() :
                     id = ""
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
@@ -73,7 +73,7 @@ class Tokenizer:
                     while i < len(currLine) :
                         token += currLine[i]
                         i += 1
-                        if (token in tokenDict):
+                        if (token in tokenDict) :
                             #len(token) == 1 check for effeciency as most tokens are > 1 len
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
@@ -88,7 +88,7 @@ class Tokenizer:
         self.tokenList.append((33, "\x1A"))
 
     def dumbChecker(self, dumb, token) :
-        if tokenDict.get(token, -1) in range(12, 31):
+        if tokenDict.get(token, -1) in range(12, 31) :
             return True
         elif dumb :
             return False
