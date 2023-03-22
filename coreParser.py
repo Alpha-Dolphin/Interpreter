@@ -232,7 +232,7 @@ class AST:
             if hasattr(self, "cond2"): 
                 super().indentPrint("[", ind)
                 self.cond1.prettyPrint(ind)
-                self.logOp.prettyPrint(ind)
+                self.indentPrint(self.logOp, ind)
                 self.cond2.prettyPrint(ind)
                 super().indentPrint("]", ind)
             elif hasattr(self, "notChild"): 
