@@ -38,7 +38,7 @@ class AST:
                 or AST.tokenizer.getToken() >= 33: \
                 self.throwError()
 
-        def throwError(self, token) -> None:
+        def throwError(self, token : str) -> None:
             raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
             (AST.tokenizer.currPos, type(self).__name__, token, AST.tokenizer.getTokenName()))
   
