@@ -46,18 +46,19 @@ class AST:
             return True if (AST.tokenizer.getTokenName() == token) else False
         
         def handleSuperflousToken(self, token: str) -> None:
-            if (DEBUG) : print(token + "\n")
+            if (DEBUG) : print(token, end=' ')
             self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
         
         def getConsume(self) -> str:
             string = AST.tokenizer.getTokenName()
-            if (DEBUG) : print(string + "\n")
+            if (DEBUG) : AST.Node.indentPrint(self, string, 0)
             AST.tokenizer.skipToken()
             return string
         
         def indentPrint(self, string : str, indent : int) -> None:
-            print(" " * indent, string, end='')
             #??????????????
+            #str(string) is neccessary
+            print(" " * indent + str(string).lstrip(), end=' ')
             if (";" in str(string)) : print('\n', end='')
 
     #Node subclasses
