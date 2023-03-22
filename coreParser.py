@@ -49,14 +49,11 @@ class AST:
             if (DEBUG) : print(token + "\n")
             self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
         
-        def getConsume(self) -> int:
-            val = AST.tokenizer.getToken()
-            if (DEBUG) : 
-                if (val == 31) : print(str(AST.tokenizer.intVal()) + "\n")
-                elif (val == 32) : print(AST.tokenizer.idName() + "\n")
-                else : print(str(val) + "\n")
+        def getConsume(self) -> str:
+            string = AST.tokenizer.getTokenName()
+            if (DEBUG) : print(string + "\n")
             AST.tokenizer.skipToken()
-            return val
+            return string
         
         def indentPrint(self, string : str, indent : int) -> None:
             print(" " * indent, string, end='')
@@ -116,6 +113,7 @@ class AST:
         def prettyPrint(self, ind) :
             super().indentPrint("int", ind)
             self.idList.prettyPrint(ind)
+            super().indentPrint(";", ind)
 
     class IDListNode(Node) :
         def __init__(self) :
@@ -304,7 +302,7 @@ class AST:
     class CompOpNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.compOp = AST.tokenizer.getToken()
+            self.compOp = AST.tokenizer.getTokenName()
             self.getConsume()
 
         def prettyPrint(self, ind) :
