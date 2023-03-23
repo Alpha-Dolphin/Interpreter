@@ -236,7 +236,7 @@ class AST:
             modifyList = self.idList.exec()
             i = 0
             while i < len(modifyList):
-                modifyList[i] = AST.identifiers.pop(0)
+                AST.identifiers[modifyList[i]] = AST.inputList.pop(0)
                 i += 1
 
         def prettyPrint(self, ind) :
@@ -255,7 +255,7 @@ class AST:
 
         def exec(self) :
             for element in self.idList.exec() :
-                print(element, end = " ")
+                print(AST.identifiers[element], end = " ")
             print("\n", end = "")
 
     class CondNode(Node) :
