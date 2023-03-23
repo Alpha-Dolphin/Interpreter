@@ -65,7 +65,7 @@ class AST:
             #??????????????
             #str(string) is neccessary
             print(str(string).lstrip(), end=' ')
-            if any(substring in str(string) for substring in [";", "loop", "then", "else"]):
+            if any(substring in str(string) for substring in [";", "loop", "then", "else", "begin", "program"]):
                 print('\n', end = '')
                 AST.Node.newLine = True
 
@@ -86,9 +86,9 @@ class AST:
 
         def prettyPrint(self, ind) :
             super().indentPrint("program", ind)
-            self.declSeq.prettyPrint(ind)
+            self.declSeq.prettyPrint(ind + 1)
             super().indentPrint("begin", ind)
-            self.stmtSeq.prettyPrint(ind)
+            self.stmtSeq.prettyPrint(ind + 1)
             super().indentPrint("end", ind)
 
     class DeclSeqNode(Node) :
