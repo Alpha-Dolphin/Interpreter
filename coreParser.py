@@ -209,9 +209,10 @@ class AST:
             super().indentPrint("if", ind)
             self.cond.prettyPrint(ind)
             super().indentPrint("then", ind)
+            self.stmtSeq1.prettyPrint(ind + 1)
             if hasattr(self, "stmtSeq2") :
                 super().indentPrint("else", ind)
-                self.stmtSeq2.prettyPrint(ind)
+                self.stmtSeq2.prettyPrint(ind + 1)
             super().indentPrint("end", ind)
 
     class LoopNode(Node) :
