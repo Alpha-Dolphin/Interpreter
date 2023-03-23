@@ -59,8 +59,9 @@ class AST:
         def indentPrint(self, string : str, indent : int) -> None:
             #??????????????
             #str(string) is neccessary
-            print(" " * indent + str(string).lstrip(), end=' ')
-            if (";" in str(string)) : print('\n', end='')
+            print(str(string).lstrip(), end=' ')
+            if (";" in str(string)) : 
+                print('\n' + " "  * 4 * indent, end='')
 
     #Node subclasses
 
@@ -223,7 +224,7 @@ class AST:
             super().indentPrint("while", ind)
             self.cond.prettyPrint(ind)
             super().indentPrint("loop", ind)
-            self.stmtSeq.prettyPrint(ind)
+            self.stmtSeq.prettyPrint(ind + 1)
             super().indentPrint("end", ind)
 
     class InNode(Node) :
