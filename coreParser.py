@@ -12,7 +12,7 @@ class AST:
         AST.inputList = input_file_name.split()
         AST.treeBase = AST.ProgramNode()
         # TODO: Make this a dictionary
-        AST.identifiers = []
+        AST.identifiers = {}
 
     def prettyPrint(self) :
         self.treeBase.prettyPrint(0)
@@ -232,16 +232,16 @@ class AST:
             super().handleSuperflousToken("read")
             self.idList = AST.IDListNode()
 
-        def prettyPrint(self, ind) :
-            super().indentPrint("read", ind)
-            self.idList.prettyPrint(ind)
-
         def exec(self) :
             modifyList = self.idList.exec()
             i = 0
             while i < len(modifyList):
                 modifyList[i] = AST.identifiers.pop(0)
                 i += 1
+
+        def prettyPrint(self, ind) :
+            super().indentPrint("read", ind)
+            self.idList.prettyPrint(ind)
 
     class OutNode(Node) :
         def __init__(self) :
