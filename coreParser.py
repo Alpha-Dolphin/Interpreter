@@ -27,6 +27,7 @@ class AST:
         def __init__(self) :
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
+            self.newLine = True
         
         def isRightNode(self) -> None:
             return
@@ -60,7 +61,7 @@ class AST:
             #??????????????
             #str(string) is neccessary
             print(str(string).lstrip(), end=' ')
-            if (";" in str(string)) : 
+            if any(substring in str(string) for substring in [";", "loop"]):
                 print('\n' + " "  * 4 * indent, end='')
 
     #Node subclasses
@@ -269,9 +270,14 @@ class AST:
                 self.cond2 = AST.CondNode()
             elif super().isTokenPresent("!") :
                 self.notChild = self.getConsume()
-                self.cond1 = AST.CondNode()
+                self.cond = AST.CondNode()
             else :
                 self.comp = AST.CompNode()
+        
+        def exec(self) :
+            if hasattr(self, "logOp"): return eval(f"{self.cond1.exec()} {self.logOp} {self.cond2.exec()}")
+            elif hasattr(self, "notChild"): return not self.cond.exec()
+            else : return self.comp.exec()
 
         def prettyPrint(self, ind) :
             if hasattr(self, "cond2"): 
@@ -291,14 +297,17 @@ class AST:
             super().__init__()
             super().handleSuperflousToken("(")
             self.op1 = AST.OpNode()
-            self.compOp = AST.CompOpNode()
+            self.compOp = self.getConsume()
             self.op2 = AST.OpNode()
             super().handleSuperflousToken(")")
+
+        def exec(self) :
+            return eval(f"{self.op1.exec()} {self.compOp} {self.op2.exec()}")
 
         def prettyPrint(self, ind) :
             super().indentPrint("(", ind)
             self.op1.prettyPrint(ind)
-            self.compOp.prettyPrint(ind)
+            self.indentPrint(self.compOp, ind)
             self.op2.prettyPrint(ind)
             super().indentPrint(")", ind)
 
@@ -310,6 +319,9 @@ class AST:
                 self.mathOp = self.getConsume()
                 self.exp = AST.ExpNode()
 
+        def exec(self) :
+            return eval(f"{self.fac.exec()} {self.mathOp} {self.exp.exec()}") if hasattr(self, "mathOp") else self.fac.exec()
+
         def prettyPrint(self, ind) :
             self.fac.prettyPrint(ind)
             if hasattr(self,"mathOp") :
@@ -319,13 +331,16 @@ class AST:
     class FacNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.opNode = AST.OpNode()
+            self.op = AST.OpNode()
             if (super().isTokenPresent("*")) :
                 super().handleSuperflousToken("*")
                 self.fac = AST.FacNode()
 
+        def exec(self) :
+            return eval(f"{self.op.exec()} * {self.fac.exec()}") if hasattr(self, "mathOp") else self.op.exec()
+
         def prettyPrint(self, ind) :
-            self.opNode.prettyPrint(ind)
+            self.op.prettyPrint(ind)
             if hasattr(self,"fac") :
                 self.indentPrint("*", ind)
                 self.fac.prettyPrint(ind)
@@ -337,6 +352,9 @@ class AST:
             elif AST.tokenizer.getToken() == 32 : self.child = AST.IDNode()
             else : self.child = AST.ExpNode()
 
+        def exec(self) :
+            return self.child.exec()
+
         def prettyPrint(self, ind) :
             if self.child is AST.ExpNode :
                 self.indentPrint("(", ind)
@@ -345,22 +363,28 @@ class AST:
             else :
                 self.child.prettyPrint(ind)
 
-    class CompOpNode(Node) :
-        def __init__(self) :
-            super().__init__()
-            self.compOp = AST.tokenizer.getTokenName()
-            self.getConsume()
+    # Redudant Node, consider refactoring out later
+    # class CompOpNode(Node) :
+    #     def __init__(self) :
+    #         super().__init__()
+    #         self.compOp = AST.tokenizer.getTokenName()
+    #         self.getConsume()
 
-        def prettyPrint(self, ind) :
-            self.indentPrint(self.compOp, ind)
+    #     def exec(self) :
+    #         return self.compOp
+
+    #     def prettyPrint(self, ind) :
+    #         self.indentPrint(self.compOp, ind)
 
     class IDNode(Node) :
         def __init__(self) :
             super().__init__()
             self.name = AST.tokenizer.idName()
+            AST.identifiers[self.name] = "I have been declared"
             self.getConsume()
         #TODO: Need two methods for creating identifiers vs refering to existing identifiers
-        
+        def exec(self) :
+            return self.name
         def prettyPrint(self, ind) :
             self.indentPrint(self.name, ind)
 
@@ -369,6 +393,9 @@ class AST:
             super().__init__()
             self.value = AST.tokenizer.intVal()
             self.getConsume()
+
+        def exec(self) :
+            return self.value
 
         def prettyPrint(self, ind) :
             self.indentPrint(self.value, ind)
