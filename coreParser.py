@@ -23,7 +23,9 @@ class AST:
     #Abstracts out all AST.Tokenizer calls
 
     class Node:
+
         newLine = False
+
         def __init__(self) :
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
@@ -57,13 +59,13 @@ class AST:
             return string
         
         def indentPrint(self, string : str, indent : int) -> None:
-            #??????????????
-            #str(string) is neccessary
             if(AST.Node.newLine) :
                 print(" "  * 4 * indent, end='')
                 AST.Node.newLine = False
+            #??????????????
+            #str(string) is neccessary
             print(str(string).lstrip(), end=' ')
-            if any(substring in str(string) for substring in [";", "loop"]):
+            if any(substring in str(string) for substring in [";", "loop", "then", "else"]):
                 print('\n', end = '')
                 AST.Node.newLine = True
 
