@@ -382,9 +382,10 @@ class AST:
             self.name = AST.tokenizer.idName()
             AST.identifiers[self.name] = "I have been declared"
             self.getConsume()
-        #TODO: Need two methods for creating identifiers vs refering to existing identifiers
+
         def exec(self) :
             return self.name
+
         def prettyPrint(self, ind) :
             self.indentPrint(self.name, ind)
 
