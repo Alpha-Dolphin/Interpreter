@@ -10,8 +10,9 @@ class AST:
     def __init__(self, program_file_name, input_file_name) :
         AST.tokenizer = Tokenizer(program_file_name)
         # TODO: Make this a delimited list
-        AST.inputList = input_file_name
-        self.treeBase = AST.ProgramNode()
+        AST.inputList = input_file_name.split()
+        AST.treeBase = AST.ProgramNode()
+        AST.identifiers = []
 
     def prettyPrint(self) :
         self.treeBase.prettyPrint(0)
@@ -72,6 +73,10 @@ class AST:
             self.stmtSeq = AST.StmtSeqNode()
             super().handleSuperflousToken('end')
 
+        def exec(self) :
+            self.declSeq.exec()
+            self.stmtSeq.exec()
+
         def prettyPrint(self, ind) :
             super().indentPrint("program", ind)
             self.declSeq.prettyPrint(ind)
@@ -79,15 +84,16 @@ class AST:
             self.stmtSeq.prettyPrint(ind)
             super().indentPrint("end", ind)
 
-        def exec(self) :
-            print("TODO")
-   
     class DeclSeqNode(Node) :
         def __init__(self) :
             super().__init__()
             self.decl = AST.DeclNode()
             if super().isTokenPresent('int') :
                 self.declSeq = AST.DeclSeqNode()
+
+        def exec(self) :
+            self.decl.exec()
+            if hasattr(self, "declSeq") : self.declSeq.exec()
 
         def prettyPrint(self, ind) :
             self.decl.prettyPrint(ind)
@@ -100,6 +106,10 @@ class AST:
             if not super().isTokenPresent('end') :
                 self.stmtSeq = AST.StmtSeqNode()
 
+        def exec(self) :
+            self.stmt.exec()
+            if hasattr(self, "stmtSeq") : self.stmtSeq.exec()
+
         def prettyPrint(self, ind) :
             self.stmt.prettyPrint(ind)
             if hasattr(self, "stmtSeq") : self.stmtSeq.prettyPrint(ind)
@@ -110,6 +120,9 @@ class AST:
             super().handleSuperflousToken('int')
             self.idList = AST.IDListNode()
             super().handleSuperflousToken(';')
+
+        def exec(self) :
+            self.idList.exec()
 
         def prettyPrint(self, ind) :
             super().indentPrint("int", ind)
@@ -123,6 +136,12 @@ class AST:
             if super().isTokenPresent(',') :
                 super().handleSuperflousToken(',')
                 self.idList = AST.IDListNode()
+
+        def exec(self) :
+            result = [self.id.exec()]
+            if hasattr(self, "idList"):
+                result += self.idList.exec()
+            return result
 
         def prettyPrint(self, ind) :
             self.id.prettyPrint(ind)
@@ -140,6 +159,9 @@ class AST:
             else : self.child = AST.AssignNode()
             super().handleSuperflousToken(';')
 
+        def exec(self) :
+            self.child.exec()
+
         def prettyPrint(self, ind) :
             self.child.prettyPrint(ind)
             self.child.indentPrint(';', ind)
@@ -150,6 +172,9 @@ class AST:
             self.id = AST.IDNode()
             super().handleSuperflousToken("=")
             self.exp = AST.ExpNode()
+
+        def exec(self) :
+            AST.identifiers[self.id.exec()] = self.exp.exec()
 
         def prettyPrint(self, ind) :
             self.id.prettyPrint(ind)
@@ -169,6 +194,10 @@ class AST:
             else: self.getConsume()
             super().handleSuperflousToken('end')
 
+        def exec(self) :
+            if (self.cond.exec()) : self.stmtSeq1.exec()
+            elif hasattr(self, "stmtSeq2") : self.stmtSeq2.exec()
+
         def prettyPrint(self, ind) :
             super().indentPrint("if", ind)
             self.cond.prettyPrint(ind)
@@ -187,6 +216,9 @@ class AST:
             self.stmtSeq = AST.StmtSeqNode()
             super().handleSuperflousToken("end")
 
+        def exec(self) :
+            while(self.cond.exec()) : self.stmtSeq.exec()
+
         def prettyPrint(self, ind) :
             super().indentPrint("while", ind)
             self.cond.prettyPrint(ind)
@@ -204,6 +236,13 @@ class AST:
             super().indentPrint("read", ind)
             self.idList.prettyPrint(ind)
 
+        def exec(self) :
+            modifyList = self.idList.exec()
+            i = 0
+            while i < len(modifyList):
+                modifyList[i] = AST.identifiers.pop(0)
+                i += 1
+
     class OutNode(Node) :
         def __init__(self) :
             super().__init__()
@@ -213,6 +252,11 @@ class AST:
         def prettyPrint(self, ind) :
             super().indentPrint("write", ind)
             self.idList.prettyPrint(ind)
+
+        def exec(self) :
+            for element in self.idList.exec() :
+                print(element, end = " ")
+            print("\n", end = "")
 
     class CondNode(Node) :
         def __init__(self) :
