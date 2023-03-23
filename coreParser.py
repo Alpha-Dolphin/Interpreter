@@ -363,7 +363,7 @@ class AST:
             else :
                 self.child.prettyPrint(ind)
 
-    # Redudant Node, consider refactoring out later
+    # Redudant Node
     # class CompOpNode(Node) :
     #     def __init__(self) :
     #         super().__init__()
