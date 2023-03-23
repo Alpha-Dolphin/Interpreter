@@ -8,11 +8,10 @@ class AST:
     #AST Methods
 
     def __init__(self, program_file_name, input_file_name) :
+        AST.identifiers = {}
         AST.tokenizer = Tokenizer(program_file_name)
         AST.inputList = input_file_name.split()
         AST.treeBase = AST.ProgramNode()
-        # TODO: Make this a dictionary
-        AST.identifiers = {}
 
     def prettyPrint(self) :
         self.treeBase.prettyPrint(0)
