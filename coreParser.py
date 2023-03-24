@@ -24,9 +24,8 @@ class AST:
 
     class Node:
 
-        newLine = False
-
         def __init__(self) :
+            AST.Node.newLine = False
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
         
