@@ -67,7 +67,7 @@ class AST:
             #??????????????
             #str(string) is neccessary
             print(str(string).lstrip(), end=' ')
-            if any(substring in str(string) for substring in [";", "loop", "if", "then", "else", "begin", "program"]):
+            if any(substring in str(string) for substring in ["begin", "program", ";", "loop", "if", "then", "else"]):
                 print('\n', end = '')
                 AST.Node.newLine = True
 
