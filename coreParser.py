@@ -1,7 +1,7 @@
 import sys
 from tokenizer import Tokenizer
 
-DEBUG = True
+DEBUG = False
 
 class AST:
 
@@ -264,9 +264,7 @@ class AST:
             self.idList.prettyPrint(ind)
 
         def exec(self) :
-            for element in self.idList.exec() :
-                print(AST.identifiers[element], end = " ")
-            print("\n", end = "")
+            for element in self.idList.exec() : print(f"{element} = {AST.identifiers[element]}\n", end="")
 
     class CondNode(Node) :
         def __init__(self) :

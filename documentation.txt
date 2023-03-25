@@ -1,9 +1,0 @@
-Design:
-    The tokenizer method works by reading in characters and keeping track of whitespace. If the next character is whitespace, it ignores it and marks that the next token has valid whitespace. If it encounters an integer or identifier, it parses it until completion, yields the token value, and then marks that the next character does not have valid whitespace. If it encounters a reserved word or special word, it continues to iterate until it finds a match in the dictionary (except for the special behavior to greedily tokenize special characters like "=="). It then yields the token and checks what the token is to determine if there needs to be white space following it.
-    The getToken method returns the token of currPos
-    The skipToken method increments currPos so long as it would not overflow and getToken vouches that the current token is not EOF or invalid
-    The idName method returns the name of the indentifier if it is valid, or an error if not
-    The intVal method returns the value of the integer if it is valid, or an error if not
-    The dumbChecker method is the method for determining if a given reservered word or special word needs white spaceafterwards.
-     
-In its submitted state the program is configured to tokenize the program, demonstrate a few of the class methods, and then crash/terminate
