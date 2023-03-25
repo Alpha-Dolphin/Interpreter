@@ -10,11 +10,13 @@ class AST:
     def __init__(self, program_file_name, input_file_name) :
         AST.identifiers = {}
         AST.tokenizer = Tokenizer(program_file_name)
-        AST.inputList = input_file_name.split()
+        with open(input_file_name, 'r') as input_file: file_contents = input_file.read()
+        AST.inputList = file_contents.split()
         AST.treeBase = AST.ProgramNode()
 
     def prettyPrint(self) :
         self.treeBase.prettyPrint(0)
+        print("\n", end = "")
 
     def exec(self) :
         self.treeBase.exec()
@@ -358,7 +360,7 @@ class AST:
             else : self.child = AST.ExpNode()
 
         def exec(self) :
-            return self.child.exec()
+            return AST.identifiers[self.child.exec()] if isinstance(self.child, AST.IDNode) else self.child.exec()
 
         def prettyPrint(self, ind) :
             if self.child is AST.ExpNode :
@@ -385,7 +387,7 @@ class AST:
         def __init__(self) :
             super().__init__()
             self.name = AST.tokenizer.idName()
-            AST.identifiers[self.name] = "I have been declared"
+            AST.identifiers[self.name] = "I, " + self.name + " , have been declared"
             self.getConsume()
 
         def exec(self) :
@@ -414,4 +416,4 @@ if __name__ == '__main__':
         if len(sys.argv) > 1:
             program_file_name = sys.argv[1]
     ast = AST(program_file_name, input_file_name)
-    ast.prettyPrint()
+    ast.exec()
