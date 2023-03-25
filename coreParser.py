@@ -1,7 +1,7 @@
 import sys
 from tokenizer import Tokenizer
 
-DEBUG = False
+DEBUG = True
 
 class AST:
 
@@ -28,6 +28,7 @@ class AST:
 
         def __init__(self) :
             AST.Node.newLine = False
+            if DEBUG: print(f"\n\t{type(self).__name__}\n", end="")
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
         
