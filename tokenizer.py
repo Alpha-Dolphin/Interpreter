@@ -13,19 +13,6 @@ class Tokenizer:
     
     def getTokenName(self) -> str:
         return self.tokenList[self.currPos][1]
-    
-    def idName(self) :
-        #Python doesn't allow exception raises in ternaries, what a rip off
-        if self.tokenList[self.currPos][0] == 32:
-            return self.tokenList[self.currPos][1]
-        else:
-            raise ValueError("Token is not an identifier: \"%s\"" % self.tokenList[self.currPos][1])
-
-    def intVal(self) :
-        if self.tokenList[self.currPos][0] == 31:
-            return self.tokenList[self.currPos][1]
-        else:
-            raise ValueError("Token is not an integer: \"%s\"" % self.tokenList[self.currPos][1])
 
     def skipToken(self) :
         if (self.currPos < len(self.tokenList) and self.tokenList[self.currPos][0] < 33) :
