@@ -386,7 +386,7 @@ class AST:
     class IDNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.name = AST.tokenizer.idName()
+            self.name = AST.tokenizer.getTokenName()
             AST.identifiers[self.name] = "I, " + self.name + " , have been declared"
             self.getConsume()
 
@@ -399,7 +399,7 @@ class AST:
     class IntNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.value = AST.tokenizer.intVal()
+            self.value = AST.tokenizer.getTokenName()
             self.getConsume()
 
         def exec(self) :
