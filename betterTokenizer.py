@@ -1,6 +1,7 @@
 from dictionary import tokenDict
 from tokenizer import Tokenizer
 
+#Tokenizer without whitespace requirements
 class BetterTokenizer(Tokenizer) :
 
     def tokenize(self) :
