@@ -28,7 +28,7 @@ class AST:
 
         def __init__(self) :
             AST.Node.newLine = False
-            if DEBUG: print(f"\n\t{type(self).__name__}\n", end="")
+            if DEBUG: print(f"\n\t{type(self).__name__}")
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
         
@@ -264,7 +264,7 @@ class AST:
             self.idList.prettyPrint(ind)
 
         def exec(self) :
-            for element in self.idList.exec() : print(f"{element} = {AST.identifiers[element]}\n", end="")
+            for element in self.idList.exec() : print(f"{element} = {AST.identifiers[element]}")
 
     class CondNode(Node) :
         def __init__(self) :
