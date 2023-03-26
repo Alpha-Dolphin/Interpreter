@@ -273,9 +273,7 @@ class AST:
                 self.comp = AST.CompNode()
         
         def exec(self) :
-            if hasattr(self, "logOp"): return eval(f"{self.cond1.exec()} {self.logOp} {self.cond2.exec()}")
-            elif hasattr(self, "notChild"): return not self.cond.exec()
-            else : return self.comp.exec()
+            return eval(f"{self.cond1.exec()} {self.logOp} {self.cond2.exec()}") if hasattr(self, "logOp") else not self.cond.exec() if hasattr(self, "notChild") else self.comp.exec()
 
         def prettyPrint(self, ind) :
             if hasattr(self, "cond2"): 
