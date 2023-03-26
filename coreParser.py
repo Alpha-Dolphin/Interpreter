@@ -28,13 +28,13 @@ class AST:
 
         def __init__(self) :
             AST.Node.newLine = False
-            if DEBUG: print(f"\n\t{type(self).__name__}")
+            if (DEBUG): print(f"\n\t{type(self).__name__}")
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode
         
         def isRightNode(self) -> None:
             return
-            #The if statement needs a lot of work
+            #This if statement needs a lot of work
             if (AST.tokenizer.getToken() <= 30 and \
                 AST.tokenizer.getTokenName() not in type(self).__name__ ) or \
                 (AST.tokenizer.getToken() == 31 and \
@@ -48,7 +48,7 @@ class AST:
             (AST.tokenizer.currPos, type(self).__name__, token, AST.tokenizer.getTokenName()))
   
         def isTokenPresent(self, token: str) -> bool:
-            return True if (AST.tokenizer.getTokenName() == token) else False
+            return AST.tokenizer.getTokenName() == token
         
         def handleSuperflousToken(self, token: str) -> None:
             if (DEBUG) : print(token, end=' ')
@@ -97,8 +97,7 @@ class AST:
         def __init__(self) :
             super().__init__()
             self.decl = AST.DeclNode()
-            if super().isTokenPresent('int') :
-                self.declSeq = AST.DeclSeqNode()
+            if super().isTokenPresent('int') : self.declSeq = AST.DeclSeqNode()
 
         def exec(self) :
             self.decl.exec()
@@ -112,8 +111,7 @@ class AST:
         def __init__(self) :
             super().__init__()
             self.stmt = AST.StmtNode()
-            if not super().isTokenPresent('end') :
-                self.stmtSeq = AST.StmtSeqNode()
+            if not super().isTokenPresent('end') : self.stmtSeq = AST.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
@@ -148,8 +146,7 @@ class AST:
 
         def exec(self) :
             result = [self.id.exec()]
-            if hasattr(self, "idList"):
-                result += self.idList.exec()
+            if hasattr(self, "idList"): result += self.idList.exec()
             return result
 
         def prettyPrint(self, ind) :
@@ -200,7 +197,6 @@ class AST:
             if super().isTokenPresent('else') :
                 self.getConsume()
                 self.stmtSeq2 = AST.StmtSeqNode()
-            else: self.getConsume()
             super().handleSuperflousToken('end')
 
         def exec(self) :
@@ -243,11 +239,7 @@ class AST:
             self.idList = AST.IDListNode()
 
         def exec(self) :
-            modifyList = self.idList.exec()
-            i = 0
-            while i < len(modifyList):
-                AST.identifiers[modifyList[i]] = AST.inputList.pop(0)
-                i += 1
+            for identifier in self.idList.exec(): AST.identifiers[identifier] = AST.inputList.pop(0)
 
         def prettyPrint(self, ind) :
             super().indentPrint("read", ind)
@@ -343,7 +335,7 @@ class AST:
                 self.fac = AST.FacNode()
 
         def exec(self) :
-            return eval(f"{self.op.exec()} * {self.fac.exec()}") if hasattr(self, "mathOp") else self.op.exec()
+            return eval(f"{self.op.exec()} * {self.fac.exec()}") if hasattr(self, "fac") else self.op.exec()
 
         def prettyPrint(self, ind) :
             self.op.prettyPrint(ind)
@@ -354,6 +346,7 @@ class AST:
     class OpNode(Node) :
         def __init__(self) :
             super().__init__()
+            #TODO Factor this out?
             if AST.tokenizer.getToken() == 31 : self.child = AST.IntNode()
             elif AST.tokenizer.getToken() == 32 : self.child = AST.IDNode()
             else : self.child = AST.ExpNode()
