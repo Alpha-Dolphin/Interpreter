@@ -139,7 +139,7 @@ class AST:
     class IDListNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.id = AST.IDNode()
+            self.id = AST.IDNode(True)
             if super().isTokenPresent(',') :
                 super().handleSuperflousToken(',')
                 self.idList = AST.IDListNode()
@@ -374,10 +374,11 @@ class AST:
     #         self.indentPrint(self.compOp, ind)
 
     class IDNode(Node) :
-        def __init__(self) :
+        def __init__(self, boolean: bool = False):
             super().__init__()
             self.name = AST.tokenizer.getTokenName()
-            AST.identifiers[self.name] = "I, " + self.name + " , have been declared"
+            if (boolean) : AST.identifiers[self.name] = "I, " + self.name + " , have been declared"
+            elif self.name not in AST.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
             self.getConsume()
 
         def exec(self) :
