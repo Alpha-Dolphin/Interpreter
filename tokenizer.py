@@ -8,7 +8,7 @@ class Tokenizer:
         self.input_file = open(input_file_name, "r")
         with open(input_file_name) as self.input_file : self.tokenize()
 
-    def getToken(self) -> int:
+    def getTokenNumber(self) -> int:
         return self.tokenList[self.currPos][0]
     
     def getTokenName(self) -> str:

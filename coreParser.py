@@ -345,8 +345,8 @@ class AST:
         def __init__(self) :
             super().__init__()
             #TODO Factor this out?
-            if AST.tokenizer.getToken() == 31 : self.child = AST.IntNode()
-            elif AST.tokenizer.getToken() == 32 : self.child = AST.IDNode()
+            if AST.tokenizer.getTokenNumber() == 31 : self.child = AST.IntNode()
+            elif AST.tokenizer.getTokenNumber() == 32 : self.child = AST.IDNode()
             else : self.child = AST.ExpNode()
 
         def exec(self) :
