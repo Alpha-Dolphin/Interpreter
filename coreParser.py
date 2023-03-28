@@ -402,9 +402,9 @@ class AST:
 if __name__ == '__main__':
     program_file_name = "debug.txt"
     input_file_name = "input.txt"
-    if len(sys.argv) > 2:
-        input_file_name = sys.argv[2]
-        if len(sys.argv) > 1:
-            program_file_name = sys.argv[1]
+    if len(sys.argv) > 1:
+        program_file_name = sys.argv[1]
+        if len(sys.argv) > 2:
+            input_file_name = sys.argv[2]
     ast = AST(program_file_name, input_file_name)
     ast.exec()
