@@ -1,5 +1,6 @@
 from dictionary import tokenDict
 import sys
+
 class Tokenizer:
 
     def __init__(self, input_file_name) :
