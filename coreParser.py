@@ -365,7 +365,7 @@ class AST:
     #     def __init__(self) :
     #         super().__init__()
     #         self.compOp = AST.tokenizer.getTokenName()
-    #         self.getConsume()
+    #         super().getConsume()
 
     #     def exec(self) :
     #         return self.compOp
@@ -376,6 +376,7 @@ class AST:
     class IDNode(Node) :
         def __init__(self, boolean: bool = False):
             super().__init__()
+            #TODO Factor out?
             self.name = AST.tokenizer.getTokenName()
             if (boolean) : AST.identifiers[self.name] = "I, " + self.name + " , have been declared"
             elif self.name not in AST.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
@@ -390,6 +391,7 @@ class AST:
     class IntNode(Node) :
         def __init__(self) :
             super().__init__()
+            #TODO Factor out?
             self.value = AST.tokenizer.getTokenName()
             self.getConsume()
 
