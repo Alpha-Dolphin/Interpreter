@@ -407,4 +407,6 @@ if __name__ == '__main__':
         if len(sys.argv) > 2:
             input_file_name = sys.argv[2]
     ast = AST(program_file_name, input_file_name)
+    ast.prettyPrint()
+    print('\n---------\n')
     ast.exec()
