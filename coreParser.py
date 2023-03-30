@@ -3,13 +3,15 @@ from tokenizer import Tokenizer
 
 DEBUG = False
 
+#TODO: Talk to 
+
 class AST:
 
     #AST Methods
 
     def __init__(self, program_file_name, input_file_name) :
         AST.identifiers = {}
-        #Class-level tokenizer is fine per conversation with Dr. Neelam
+        #Fine per Tyler Ferguson
         AST.tokenizer = Tokenizer(program_file_name)
         with open(input_file_name, 'r') as input_file: file_contents = input_file.read()
         AST.inputList = file_contents.split()
@@ -23,7 +25,7 @@ class AST:
         self.treeBase.exec()
 
     #Node parent class
-    #Abstracts out all AST.Tokenizer calls
+    #Abstracts out most AST.Tokenizer calls
 
     class Node:
 
@@ -240,6 +242,7 @@ class AST:
             self.idList = AST.IDListNode()
 
         def exec(self) :
+            #Fine per Tyler Ferguson
             for identifier in self.idList.exec(): AST.identifiers[identifier] = AST.inputList.pop(0)
 
         def prettyPrint(self, ind) :
@@ -299,6 +302,7 @@ class AST:
             super().handleSuperflousToken(")")
 
         def exec(self) :
+            #Error message fine per Tyler Ferguson
             return eval(f"{self.op1.exec()} {self.compOp} {self.op2.exec()}")
 
         def prettyPrint(self, ind) :
@@ -361,7 +365,7 @@ class AST:
             else :
                 self.child.prettyPrint(ind)
 
-    # Redudant Node
+    # Redudant Node, fine per Tyler Fergurson
     # class CompOpNode(Node) :
     #     def __init__(self) :
     #         super().__init__()
@@ -377,9 +381,8 @@ class AST:
     class IDNode(Node) :
         def __init__(self, boolean: bool = False):
             super().__init__()
-            #TODO Factor out?
             self.name = AST.tokenizer.getTokenName()
-            if (boolean) : AST.identifiers[self.name] = "I, " + self.name + " , have been declared"
+            if (boolean) : AST.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
             elif self.name not in AST.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
             self.getConsume()
 
@@ -392,7 +395,6 @@ class AST:
     class IntNode(Node) :
         def __init__(self) :
             super().__init__()
-            #TODO Factor out?
             self.value = AST.tokenizer.getTokenName()
             self.getConsume()
 
