@@ -11,7 +11,7 @@ class AST:
 
     def __init__(self, program_file_name, input_file_name) :
         AST.identifiers = {}
-        #Fine per Tyler Ferguson
+        #Fine per conversation with Tyler Ferguson
         AST.tokenizer = Tokenizer(program_file_name)
         with open(input_file_name, 'r') as input_file: file_contents = input_file.read()
         AST.inputList = file_contents.split()
