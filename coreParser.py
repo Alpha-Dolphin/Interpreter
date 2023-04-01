@@ -68,7 +68,7 @@ class AST:
             #??????????????
             #str(string) is neccessary
             print(str(string).lstrip(), end=' ')
-            if any(substring in str(string) for substring in [";", "loop", "if", "then", "else", "begin", "program"]):
+            if any(substring in str(string) for substring in [";", "loop", "then", "else", "begin", "program"]):
                 print('\n', end = '')
                 AST.Node.newLine = True
 
@@ -112,7 +112,7 @@ class AST:
         def __init__(self) :
             super().__init__()
             self.stmt = AST.StmtNode()
-            if not super().isTokenPresent('end') : self.stmtSeq = AST.StmtSeqNode()
+            if super().isTokenPresent('if') or super().isTokenPresent('while') or super().isTokenPresent('read') or super().isTokenPresent('write') or AST.tokenizer.getTokenNumber() == 32 : self.stmtSeq = AST.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
@@ -196,6 +196,7 @@ class AST:
             super().handleSuperflousToken('then')
             self.stmtSeq1 = AST.StmtSeqNode()
             if super().isTokenPresent('else') :
+                print("CONSUMED")
                 self.getConsume()
                 self.stmtSeq2 = AST.StmtSeqNode()
             super().handleSuperflousToken('end')
@@ -206,7 +207,7 @@ class AST:
 
         def prettyPrint(self, ind) :
             super().indentPrint("if", ind)
-            self.cond.prettyPrint(ind + 1)
+            self.cond.prettyPrint(ind)
             super().indentPrint("then", ind)
             self.stmtSeq1.prettyPrint(ind + 1)
             if hasattr(self, "stmtSeq2") :
