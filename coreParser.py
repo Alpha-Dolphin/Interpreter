@@ -3,8 +3,6 @@ from tokenizer import Tokenizer
 
 DEBUG = False
 
-#TODO: Talk to 
-
 class AST:
 
     #AST Methods
