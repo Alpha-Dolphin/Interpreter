@@ -31,7 +31,7 @@ class AST:
             AST.Node.newLine = False
             if (DEBUG): print(f"\n\t{type(self).__name__}")
             #Abstract behavior to non-init method to allow to other calls when neccessary
-            self.isRightNode
+            self.isRightNode()
         
         def isRightNode(self) -> None:
             return
@@ -112,8 +112,7 @@ class AST:
         def __init__(self):
             super().__init__()
             self.stmt = AST.StmtNode()
-            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or AST.tokenizer.getTokenNumber() == 32:
-                self.stmtSeq = AST.StmtSeqNode()
+            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or AST.tokenizer.getTokenNumber() == 32: self.stmtSeq = AST.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
