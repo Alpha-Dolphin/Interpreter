@@ -108,11 +108,12 @@ class AST:
             self.decl.prettyPrint(ind)
             if hasattr(self, "declSeq") : self.declSeq.prettyPrint(ind)
 
-    class StmtSeqNode(Node) :
-        def __init__(self) :
+    class StmtSeqNode(Node):
+        def __init__(self):
             super().__init__()
             self.stmt = AST.StmtNode()
-            if super().isTokenPresent('if') or super().isTokenPresent('while') or super().isTokenPresent('read') or super().isTokenPresent('write') or AST.tokenizer.getTokenNumber() == 32 : self.stmtSeq = AST.StmtSeqNode()
+            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or AST.tokenizer.getTokenNumber() == 32:
+                self.stmtSeq = AST.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
