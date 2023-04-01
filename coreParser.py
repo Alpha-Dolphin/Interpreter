@@ -112,6 +112,7 @@ class AST:
         def __init__(self):
             super().__init__()
             self.stmt = AST.StmtNode()
+            #Need to call self here rather than super()
             if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or AST.tokenizer.getTokenNumber() == 32: self.stmtSeq = AST.StmtSeqNode()
 
         def exec(self) :
