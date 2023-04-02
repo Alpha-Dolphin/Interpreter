@@ -243,7 +243,6 @@ class IfNode(Node):
         super().handleSuperflousToken('then')
         self.stmtSeq1 = StmtSeqNode(identifiers, tokenizer, inputList)
         if super().isTokenPresent('else'):
-            print("CONSUMED")
             self.getConsume()
             self.stmtSeq2 = StmtSeqNode(identifiers, tokenizer, inputList)
         super().handleSuperflousToken('end')

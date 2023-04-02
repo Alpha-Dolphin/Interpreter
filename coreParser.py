@@ -197,7 +197,6 @@ class AST:
             super().handleSuperflousToken('then')
             self.stmtSeq1 = AST.StmtSeqNode()
             if super().isTokenPresent('else') :
-                print("CONSUMED")
                 self.getConsume()
                 self.stmtSeq2 = AST.StmtSeqNode()
             super().handleSuperflousToken('end')
