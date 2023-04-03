@@ -3,17 +3,17 @@ from tokenizer import Tokenizer
 
 DEBUG = False
 
-class AST:
+class Wrapper:
 
-    #AST Methods
+    #Wrapper Methods
 
     def __init__(self, program_file_name, input_file_name) :
-        AST.identifiers = {}
+        Wrapper.identifiers = {}
         #Fine per conversation with Tyler Ferguson
-        AST.tokenizer = Tokenizer(program_file_name)
+        Wrapper.tokenizer = Tokenizer(program_file_name)
         with open(input_file_name, 'r') as input_file: file_contents = input_file.read()
-        AST.inputList = file_contents.split()
-        AST.treeBase = AST.ProgramNode()
+        Wrapper.inputList = file_contents.split()
+        Wrapper.treeBase = Wrapper.ProgramNode()
 
     def prettyPrint(self) :
         self.treeBase.prettyPrint(0)
@@ -23,12 +23,12 @@ class AST:
         self.treeBase.exec()
 
     #Node parent class
-    #Abstracts out most AST.Tokenizer calls
+    #Abstracts out most Wrapper.Tokenizer calls
 
     class Node:
 
         def __init__(self) :
-            AST.Node.newLine = False
+            Wrapper.Node.newLine = False
             if (DEBUG): print(f"\n\t{type(self).__name__}")
             #Abstract behavior to non-init method to allow to other calls when neccessary
             self.isRightNode()
@@ -36,41 +36,41 @@ class AST:
         def isRightNode(self) -> None:
             return
             #This if statement needs a lot of work
-            if (AST.tokenizer.getToken() <= 30 and \
-                AST.tokenizer.getTokenName() not in type(self).__name__ ) or \
-                (AST.tokenizer.getToken() == 31 and \
-                not type(self).__name__ is AST.IntNode()) or \
-                (AST.tokenizer.getToken() == 32 and not type(self).__name__ is AST.IDNode()) \
-                or AST.tokenizer.getToken() >= 33: \
+            if (Wrapper.tokenizer.getToken() <= 30 and \
+                Wrapper.tokenizer.getTokenName() not in type(self).__name__ ) or \
+                (Wrapper.tokenizer.getToken() == 31 and \
+                not type(self).__name__ is Wrapper.IntNode()) or \
+                (Wrapper.tokenizer.getToken() == 32 and not type(self).__name__ is Wrapper.IDNode()) \
+                or Wrapper.tokenizer.getToken() >= 33: \
                 self.throwError()
 
         def throwError(self, token : str) -> None:
             raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
-            (AST.tokenizer.currPos, type(self).__name__, token, AST.tokenizer.getTokenName()))
+            (Wrapper.tokenizer.currPos, type(self).__name__, token, Wrapper.tokenizer.getTokenName()))
   
         def isTokenPresent(self, token: str) -> bool:
-            return AST.tokenizer.getTokenName() == token
+            return Wrapper.tokenizer.getTokenName() == token
         
         def handleSuperflousToken(self, token: str) -> None:
             if (DEBUG) : print(token, end=' ')
-            self.throwError(token) if (AST.tokenizer.getTokenName() != token) else AST.tokenizer.skipToken()
+            self.throwError(token) if (Wrapper.tokenizer.getTokenName() != token) else Wrapper.tokenizer.skipToken()
         
         def getConsume(self) -> str:
-            string = AST.tokenizer.getTokenName()
-            if (DEBUG) : AST.Node.indentPrint(self, string, 0)
-            AST.tokenizer.skipToken()
+            string = Wrapper.tokenizer.getTokenName()
+            if (DEBUG) : Wrapper.Node.indentPrint(self, string, 0)
+            Wrapper.tokenizer.skipToken()
             return string
         
         def indentPrint(self, string : str, indent : int) -> None:
-            if(AST.Node.newLine) :
+            if(Wrapper.Node.newLine) :
                 print(" "  * 4 * indent, end='')
-                AST.Node.newLine = False
+                Wrapper.Node.newLine = False
             #??????????????
             #str(string) is neccessary
             print(str(string).lstrip(), end=' ')
             if any(substring in str(string) for substring in [";", "loop", "then", "else", "begin", "program"]):
                 print('\n', end = '')
-                AST.Node.newLine = True
+                Wrapper.Node.newLine = True
 
     #Node subclasses
 
@@ -78,9 +78,9 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken('program')
-            self.declSeq = AST.DeclSeqNode()
+            self.declSeq = Wrapper.DeclSeqNode()
             super().handleSuperflousToken('begin')
-            self.stmtSeq = AST.StmtSeqNode()
+            self.stmtSeq = Wrapper.StmtSeqNode()
             super().handleSuperflousToken('end')
 
         def exec(self) :
@@ -97,8 +97,8 @@ class AST:
     class DeclSeqNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.decl = AST.DeclNode()
-            if super().isTokenPresent('int') : self.declSeq = AST.DeclSeqNode()
+            self.decl = Wrapper.DeclNode()
+            if super().isTokenPresent('int') : self.declSeq = Wrapper.DeclSeqNode()
 
         def exec(self) :
             self.decl.exec()
@@ -111,9 +111,9 @@ class AST:
     class StmtSeqNode(Node):
         def __init__(self):
             super().__init__()
-            self.stmt = AST.StmtNode()
+            self.stmt = Wrapper.StmtNode()
             #Need to call self here rather than super()
-            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or AST.tokenizer.getTokenNumber() == 32: self.stmtSeq = AST.StmtSeqNode()
+            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or Wrapper.tokenizer.getTokenNumber() == 32: self.stmtSeq = Wrapper.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
@@ -127,7 +127,7 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken('int')
-            self.idList = AST.IDListNode()
+            self.idList = Wrapper.IDListNode()
             super().handleSuperflousToken(';')
 
         def exec(self) :
@@ -141,10 +141,10 @@ class AST:
     class IDListNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.id = AST.IDNode(True)
+            self.id = Wrapper.IDNode(True)
             if super().isTokenPresent(',') :
                 super().handleSuperflousToken(',')
-                self.idList = AST.IDListNode()
+                self.idList = Wrapper.IDListNode()
 
         def exec(self) :
             result = [self.id.exec()]
@@ -160,11 +160,11 @@ class AST:
     class StmtNode(Node) :
         def __init__(self) :
             super().__init__()
-            if (super().isTokenPresent("if")) : self.child = AST.IfNode()
-            elif (super().isTokenPresent("while")) : self.child = AST.LoopNode()
-            elif (super().isTokenPresent("read")) : self.child = AST.InNode()
-            elif (super().isTokenPresent("write")) : self.child = AST.OutNode()
-            else : self.child = AST.AssignNode()
+            if (super().isTokenPresent("if")) : self.child = Wrapper.IfNode()
+            elif (super().isTokenPresent("while")) : self.child = Wrapper.LoopNode()
+            elif (super().isTokenPresent("read")) : self.child = Wrapper.InNode()
+            elif (super().isTokenPresent("write")) : self.child = Wrapper.OutNode()
+            else : self.child = Wrapper.AssignNode()
             super().handleSuperflousToken(';')
 
         def exec(self) :
@@ -177,12 +177,12 @@ class AST:
     class AssignNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.id = AST.IDNode()
+            self.id = Wrapper.IDNode()
             super().handleSuperflousToken("=")
-            self.exp = AST.ExpNode()
+            self.exp = Wrapper.ExpNode()
 
         def exec(self) :
-            AST.identifiers[self.id.exec()] = self.exp.exec()
+            Wrapper.identifiers[self.id.exec()] = self.exp.exec()
 
         def prettyPrint(self, ind) :
             self.id.prettyPrint(ind)
@@ -193,12 +193,12 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken('if')
-            self.cond = AST.CondNode()
+            self.cond = Wrapper.CondNode()
             super().handleSuperflousToken('then')
-            self.stmtSeq1 = AST.StmtSeqNode()
+            self.stmtSeq1 = Wrapper.StmtSeqNode()
             if super().isTokenPresent('else') :
                 self.getConsume()
-                self.stmtSeq2 = AST.StmtSeqNode()
+                self.stmtSeq2 = Wrapper.StmtSeqNode()
             super().handleSuperflousToken('end')
 
         def exec(self) :
@@ -219,9 +219,9 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken("while")
-            self.cond = AST.CondNode()
+            self.cond = Wrapper.CondNode()
             super().handleSuperflousToken("loop")
-            self.stmtSeq = AST.StmtSeqNode()
+            self.stmtSeq = Wrapper.StmtSeqNode()
             super().handleSuperflousToken("end")
 
         def exec(self) :
@@ -238,11 +238,11 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken("read")
-            self.idList = AST.IDListNode()
+            self.idList = Wrapper.IDListNode()
 
         def exec(self) :
             #Fine per Tyler Ferguson
-            for identifier in self.idList.exec(): AST.identifiers[identifier] = AST.inputList.pop(0)
+            for identifier in self.idList.exec(): Wrapper.identifiers[identifier] = Wrapper.inputList.pop(0)
 
         def prettyPrint(self, ind) :
             super().indentPrint("read", ind)
@@ -252,28 +252,28 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken("write")
-            self.idList = AST.IDListNode()
+            self.idList = Wrapper.IDListNode()
 
         def prettyPrint(self, ind) :
             super().indentPrint("write", ind)
             self.idList.prettyPrint(ind)
 
         def exec(self) :
-            for element in self.idList.exec() : print(f"{element} = {AST.identifiers[element]}")
+            for element in self.idList.exec() : print(f"{element} = {Wrapper.identifiers[element]}")
 
     class CondNode(Node) :
         def __init__(self) :
             super().__init__()
             if super().isTokenPresent("[") :
                 super().handleSuperflousToken("[")
-                self.cond1 = AST.CondNode()
+                self.cond1 = Wrapper.CondNode()
                 self.logOp = self.getConsume()
-                self.cond2 = AST.CondNode()
+                self.cond2 = Wrapper.CondNode()
             elif super().isTokenPresent("!") :
                 self.notChild = self.getConsume()
-                self.cond = AST.CondNode()
+                self.cond = Wrapper.CondNode()
             else :
-                self.comp = AST.CompNode()
+                self.comp = Wrapper.CompNode()
         
         def exec(self) :
             return eval(f"{self.cond1.exec()} {self.logOp} {self.cond2.exec()}") if hasattr(self, "logOp") else not self.cond.exec() if hasattr(self, "notChild") else self.comp.exec()
@@ -295,9 +295,9 @@ class AST:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken("(")
-            self.op1 = AST.OpNode()
+            self.op1 = Wrapper.OpNode()
             self.compOp = self.getConsume()
-            self.op2 = AST.OpNode()
+            self.op2 = Wrapper.OpNode()
             super().handleSuperflousToken(")")
 
         def exec(self) :
@@ -314,10 +314,10 @@ class AST:
     class ExpNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.fac = AST.FacNode()
+            self.fac = Wrapper.FacNode()
             if (super().isTokenPresent("+") or super().isTokenPresent("-")) :
                 self.mathOp = self.getConsume()
-                self.exp = AST.ExpNode()
+                self.exp = Wrapper.ExpNode()
 
         def exec(self) :
             return eval(f"{self.fac.exec()} {self.mathOp} {self.exp.exec()}") if hasattr(self, "mathOp") else self.fac.exec()
@@ -331,10 +331,10 @@ class AST:
     class FacNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.op = AST.OpNode()
+            self.op = Wrapper.OpNode()
             if (super().isTokenPresent("*")) :
                 super().handleSuperflousToken("*")
-                self.fac = AST.FacNode()
+                self.fac = Wrapper.FacNode()
 
         def exec(self) :
             return eval(f"{self.op.exec()} * {self.fac.exec()}") if hasattr(self, "fac") else self.op.exec()
@@ -349,15 +349,15 @@ class AST:
         def __init__(self) :
             super().__init__()
             #TODO Factor this out?
-            if AST.tokenizer.getTokenNumber() == 31 : self.child = AST.IntNode()
-            elif AST.tokenizer.getTokenNumber() == 32 : self.child = AST.IDNode()
-            else : self.child = AST.ExpNode()
+            if Wrapper.tokenizer.getTokenNumber() == 31 : self.child = Wrapper.IntNode()
+            elif Wrapper.tokenizer.getTokenNumber() == 32 : self.child = Wrapper.IDNode()
+            else : self.child = Wrapper.ExpNode()
 
         def exec(self) :
-            return AST.identifiers[self.child.exec()] if isinstance(self.child, AST.IDNode) else self.child.exec()
+            return Wrapper.identifiers[self.child.exec()] if isinstance(self.child, Wrapper.IDNode) else self.child.exec()
 
         def prettyPrint(self, ind) :
-            if self.child is AST.ExpNode :
+            if self.child is Wrapper.ExpNode :
                 self.indentPrint("(", ind)
                 self.child.prettyPrint(ind)
                 self.indentPrint(")", ind)
@@ -368,7 +368,7 @@ class AST:
     # class CompOpNode(Node) :
     #     def __init__(self) :
     #         super().__init__()
-    #         self.compOp = AST.tokenizer.getTokenName()
+    #         self.compOp = Wrapper.tokenizer.getTokenName()
     #         super().getConsume()
 
     #     def exec(self) :
@@ -380,9 +380,9 @@ class AST:
     class IDNode(Node) :
         def __init__(self, boolean: bool = False):
             super().__init__()
-            self.name = AST.tokenizer.getTokenName()
-            if (boolean) : AST.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
-            elif self.name not in AST.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
+            self.name = Wrapper.tokenizer.getTokenName()
+            if (boolean) : Wrapper.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
+            elif self.name not in Wrapper.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
             self.getConsume()
 
         def exec(self) :
@@ -394,7 +394,7 @@ class AST:
     class IntNode(Node) :
         def __init__(self) :
             super().__init__()
-            self.value = AST.tokenizer.getTokenName()
+            self.value = Wrapper.tokenizer.getTokenName()
             self.getConsume()
 
         def exec(self) :
@@ -410,7 +410,7 @@ if __name__ == '__main__':
         program_file_name = sys.argv[1]
         if len(sys.argv) > 2:
             input_file_name = sys.argv[2]
-    ast = AST(program_file_name, input_file_name)
+    ast = Wrapper(program_file_name, input_file_name)
     ast.prettyPrint()
     print('\n---------\n')
     ast.exec()
