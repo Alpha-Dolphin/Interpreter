@@ -404,4 +404,4 @@ if __name__ == '__main__':
     input_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + input_file_name
     ast = Wrapper(program_file_name, input_file_name)
     ast.prettyPrint()
-    #ast.exec()
+    ast.exec()
