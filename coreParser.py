@@ -9,7 +9,6 @@ class Wrapper:
 
     def __init__(self, program_file_name, input_file_name) :
         Wrapper.identifiers = {}
-        #Fine per conversation with Tyler Ferguson
         Wrapper.tokenizer = Tokenizer(program_file_name)
         with open(input_file_name, 'r') as input_file: file_contents = input_file.read()
         Wrapper.inputList = file_contents.split()
@@ -30,19 +29,6 @@ class Wrapper:
         def __init__(self) :
             Wrapper.Node.newLine = False
             if (DEBUG): print(f"\n\t{type(self).__name__}")
-            #Abstract behavior to non-init method to allow to other calls when neccessary
-            self.isRightNode()
-        
-        def isRightNode(self) -> None:
-            return
-            #This if statement needs a lot of work
-            if (Wrapper.tokenizer.getToken() <= 30 and \
-                Wrapper.tokenizer.getTokenName() not in type(self).__name__ ) or \
-                (Wrapper.tokenizer.getToken() == 31 and \
-                not type(self).__name__ is Wrapper.IntNode()) or \
-                (Wrapper.tokenizer.getToken() == 32 and not type(self).__name__ is Wrapper.IDNode()) \
-                or Wrapper.tokenizer.getToken() >= 33: \
-                self.throwError()
 
         def throwError(self, token : str) -> None:
             raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
