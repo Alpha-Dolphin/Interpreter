@@ -264,11 +264,13 @@ class Wrapper:
     class CondNode(Node) :
         def __init__(self) :
             super().__init__()
+            print(f"{Wrapper.tokenizer.getTokenName()}")
             if super().isTokenPresent("[") :
                 super().handleSuperflousToken("[")
                 self.cond1 = Wrapper.CondNode()
                 self.logOp = self.getConsume()
                 self.cond2 = Wrapper.CondNode()
+                super().handleSuperflousToken("]")
             elif super().isTokenPresent("!") :
                 self.notChild = self.getConsume()
                 self.cond = Wrapper.CondNode()
@@ -276,7 +278,7 @@ class Wrapper:
                 self.comp = Wrapper.CompNode()
         
         def exec(self) :
-            return eval(f"{self.cond1.exec()} {self.logOp} {self.cond2.exec()}") if hasattr(self, "logOp") else not self.cond.exec() if hasattr(self, "notChild") else self.comp.exec()
+            return eval(f"{self.cond1.exec()} {self.logOp} {self.cond2.exec()}".replace('&&', 'and').replace('||', 'or').replace('!', 'not ')) if hasattr(self, "logOp") else not self.cond.exec() if hasattr(self, "notChild") else self.comp.exec()
 
         def prettyPrint(self, ind) :
             if hasattr(self, "cond2"): 
@@ -351,7 +353,9 @@ class Wrapper:
             #TODO Factor this out?
             if Wrapper.tokenizer.getTokenNumber() == 31 : self.child = Wrapper.IntNode()
             elif Wrapper.tokenizer.getTokenNumber() == 32 : self.child = Wrapper.IDNode()
-            else : self.child = Wrapper.ExpNode()
+            else : 
+                print(f"TOKEN NAME - {Wrapper.tokenizer.getTokenName()}")
+                self.child = Wrapper.ExpNode()
 
         def exec(self) :
             return Wrapper.identifiers[self.child.exec()] if isinstance(self.child, Wrapper.IDNode) else self.child.exec()
