@@ -241,7 +241,7 @@ class Wrapper:
             self.idList = Wrapper.IDListNode()
 
         def exec(self) :
-            #Fine per Tyler Ferguson
+            #Error message fine per Tyler Ferguson
             for identifier in self.idList.exec(): Wrapper.identifiers[identifier] = Wrapper.inputList.pop(0)
 
         def prettyPrint(self, ind) :
