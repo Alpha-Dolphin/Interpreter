@@ -1,13 +1,14 @@
-from dictionary import tokenDict
 import sys
+
+from dictionary import tokenDict
 
 class Tokenizer:
 
-    def __init__(self, input_file_name) :
+    def __init__(self, program_file_name) :
         self.currPos = 0
         self.tokenList = []
-        self.input_file = open(input_file_name, "r")
-        with open(input_file_name) as self.input_file : self.tokenize()
+        self.input_file = open(program_file_name, "r")
+        with open(program_file_name) as self.input_file : self.tokenize()
 
     def getTokenNumber(self) -> int:
         return self.tokenList[self.currPos][0]
@@ -86,8 +87,6 @@ class Tokenizer:
 
 if __name__ == '__main__':
     program_file_name = "debug.txt"
-    if len(sys.argv) > 1:
-        program_file_name = sys.argv[1]
+    if len(sys.argv) > 1: program_file_name = sys.argv[1]
     tokenizer = Tokenizer(program_file_name)
-    for token in tokenizer.tokenList :
-        print(token)
+    for token in tokenizer.tokenList : print(token)

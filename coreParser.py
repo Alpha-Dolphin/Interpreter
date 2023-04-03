@@ -1,7 +1,9 @@
 import sys
+import os
 from tokenizer import Tokenizer
+from dotenv import load_dotenv
 
-DEBUG = False
+DEBUG = os.getenv("Template")
 
 class Wrapper:
 
@@ -10,7 +12,7 @@ class Wrapper:
     def __init__(self, program_file_name, input_file_name) :
         Wrapper.identifiers = {}
         Wrapper.tokenizer = Tokenizer(program_file_name)
-        with open(input_file_name, 'r') as input_file: file_contents = input_file.read()
+        with open(input_file_name) as input_file: file_contents = input_file.read()
         Wrapper.inputList = file_contents.split()
         Wrapper.treeBase = Wrapper.ProgramNode()
 
@@ -398,6 +400,8 @@ if __name__ == '__main__':
         program_file_name = sys.argv[1]
         if len(sys.argv) > 2:
             input_file_name = sys.argv[2]
+    program_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name
+    input_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + input_file_name
     ast = Wrapper(program_file_name, input_file_name)
     ast.prettyPrint()
     #ast.exec()
