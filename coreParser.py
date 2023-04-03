@@ -15,8 +15,9 @@ class Wrapper:
         Wrapper.treeBase = Wrapper.ProgramNode()
 
     def prettyPrint(self) :
+        print("\n--------", end = "\n")
         self.treeBase.prettyPrint(0)
-        print("\n", end = "")
+        print("\n--------", end = "\n")
 
     def exec(self) :
         self.treeBase.exec()
@@ -250,7 +251,6 @@ class Wrapper:
     class CondNode(Node) :
         def __init__(self) :
             super().__init__()
-            print(f"{Wrapper.tokenizer.getTokenName()}")
             if super().isTokenPresent("[") :
                 super().handleSuperflousToken("[")
                 self.cond1 = Wrapper.CondNode()
@@ -339,9 +339,7 @@ class Wrapper:
             #TODO Factor this out?
             if Wrapper.tokenizer.getTokenNumber() == 31 : self.child = Wrapper.IntNode()
             elif Wrapper.tokenizer.getTokenNumber() == 32 : self.child = Wrapper.IDNode()
-            else : 
-                print(f"TOKEN NAME - {Wrapper.tokenizer.getTokenName()}")
-                self.child = Wrapper.ExpNode()
+            else : self.child = Wrapper.ExpNode()
 
         def exec(self) :
             return Wrapper.identifiers[self.child.exec()] if isinstance(self.child, Wrapper.IDNode) else self.child.exec()
@@ -402,5 +400,4 @@ if __name__ == '__main__':
             input_file_name = sys.argv[2]
     ast = Wrapper(program_file_name, input_file_name)
     ast.prettyPrint()
-    print('\n---------\n')
-    ast.exec()
+    #ast.exec()
