@@ -275,7 +275,7 @@ class Wrapper:
                 super().indentPrint("]", ind)
             elif hasattr(self, "notChild"): 
                 super().indentPrint("!", ind)
-                self.cond1.prettyPrint(ind)
+                self.cond.prettyPrint(ind)
             else :
                 self.comp.prettyPrint(ind)
 
