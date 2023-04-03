@@ -1,4 +1,5 @@
 import sys
+import os
 
 from dictionary import tokenDict
 
@@ -88,5 +89,6 @@ class Tokenizer:
 if __name__ == '__main__':
     program_file_name = "debug.txt"
     if len(sys.argv) > 1: program_file_name = sys.argv[1]
+    program_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name
     tokenizer = Tokenizer(program_file_name)
     for token in tokenizer.tokenList : print(token)
