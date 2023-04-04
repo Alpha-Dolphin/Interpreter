@@ -43,8 +43,8 @@ class Wrapper:
         
         def handleSuperflousToken(self, token) -> None:
             if (DEBUG) : print(token, end=' ')
-            if ((type(token) is int and Wrapper.tokenizer.getTokenNumber() != token) or (type(token) is str and Wrapper.tokenizer.getTokenName() != token)) : self.throwError(str(token))
-            Wrapper.tokenizer.skipToken()
+            if ((type(token) is int and Wrapper.tokenizer.getTokenNumber() == token) or (type(token) is str and Wrapper.tokenizer.getTokenName() == token)) : Wrapper.tokenizer.skipToken()
+            else : self.throwError(str(token))
         
         def getConsume(self) -> str:
             string = Wrapper.tokenizer.getTokenName()
