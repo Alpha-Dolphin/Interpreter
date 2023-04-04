@@ -3,7 +3,8 @@ import os
 from tokenizer import Tokenizer
 from dotenv import load_dotenv
 
-DEBUG = os.getenv("Template")
+load_dotenv()  # Load environment variables from .env file
+DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't') #.env for booleans is buggy
 
 class Wrapper:
 
