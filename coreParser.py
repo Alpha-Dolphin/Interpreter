@@ -38,8 +38,12 @@ class Wrapper:
             raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
             (Wrapper.tokenizer.currPos, type(self).__name__, token, Wrapper.tokenizer.getTokenName()))
   
-        def isTokenPresent(self, token: str) -> bool:
-            return Wrapper.tokenizer.getTokenName() == token
+        def isTokenPresent(self, token) -> bool:
+            if (type(token) is int) : return Wrapper.tokenizer.getTokenNumber() == token
+            elif (type(token) is str) : return Wrapper.tokenizer.getTokenName() == token
+            else : 
+                self.throwError(str(token))
+                return False
         
         def handleSuperflousToken(self, token) -> None:
             if (DEBUG) : print(token, end=' ')
@@ -105,7 +109,7 @@ class Wrapper:
             super().__init__()
             self.stmt = Wrapper.StmtNode()
             #Need to call self here rather than super()
-            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or Wrapper.tokenizer.getTokenNumber() == 32: self.stmtSeq = Wrapper.StmtSeqNode()
+            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or super().isTokenPresent(32): self.stmtSeq = Wrapper.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
@@ -341,9 +345,8 @@ class Wrapper:
     class OpNode(Node) :
         def __init__(self) :
             super().__init__()
-            #TODO Factor this out?
-            if Wrapper.tokenizer.getTokenNumber() == 31 : self.child = Wrapper.IntNode()
-            elif Wrapper.tokenizer.getTokenNumber() == 32 : self.child = Wrapper.IDNode()
+            if super().isTokenPresent(31) : self.child = Wrapper.IntNode()
+            elif super().isTokenPresent(32) : self.child = Wrapper.IDNode()
             else : self.child = Wrapper.ExpNode()
 
         def exec(self) :
