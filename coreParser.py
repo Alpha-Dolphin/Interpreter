@@ -374,7 +374,7 @@ class Wrapper:
         def __init__(self, boolean: bool = False):
             super().__init__()
             self.name = Wrapper.tokenizer.getTokenName()
-            if (boolean) : Wrapper.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
+            if boolean : Wrapper.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
             elif self.name not in Wrapper.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
             self.getConsume()
 
