@@ -29,9 +29,9 @@ class Wrapper:
     #Abstracts out most Wrapper.Tokenizer calls
 
     class Node:
-
+        newLine = False
+        
         def __init__(self) :
-            Wrapper.Node.newLine = False
             if (DEBUG): print(f"\n\t{type(self).__name__}")
 
         def throwError(self, token : str) -> None:
