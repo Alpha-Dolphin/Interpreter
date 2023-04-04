@@ -38,13 +38,15 @@ class Wrapper:
             raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
             (Wrapper.tokenizer.currPos, type(self).__name__, token, Wrapper.tokenizer.getTokenName()))
   
+        #Sucks that Python doesn't support overloading
         def isTokenPresent(self, token) -> bool:
             if (type(token) is int) : return Wrapper.tokenizer.getTokenNumber() == token
             elif (type(token) is str) : return Wrapper.tokenizer.getTokenName() == token
             else : 
                 self.throwError(str(token))
                 return False
-        
+
+        #Sucks that Python doesn't support overloading 
         def handleSuperflousToken(self, token) -> None:
             if (DEBUG) : print(token, end=' ')
             if ((type(token) is int and Wrapper.tokenizer.getTokenNumber() == token) or (type(token) is str and Wrapper.tokenizer.getTokenName() == token)) : Wrapper.tokenizer.skipToken()
@@ -61,7 +63,7 @@ class Wrapper:
                 print(" "  * 4 * indent, end='')
                 Wrapper.Node.newLine = False
             #??????????????
-            #str(string) is neccessary
+            #str(string) is neccessary even though it is strongly typed
             print(str(string).lstrip(), end=' ')
             if any(substring in str(string) for substring in [";", "loop", "then", "else", "begin", "program"]):
                 print('\n', end = '')
@@ -109,7 +111,7 @@ class Wrapper:
             super().__init__()
             self.stmt = Wrapper.StmtNode()
             #Need to call self here rather than super()
-            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write']) or super().isTokenPresent(32): self.stmtSeq = Wrapper.StmtSeqNode()
+            if any(self.isTokenPresent(token) for token in ['if', 'while', 'read', 'write', 32]): self.stmtSeq = Wrapper.StmtSeqNode()
 
         def exec(self) :
             self.stmt.exec()
