@@ -30,7 +30,7 @@ class Wrapper:
 
     class Node:
         newLine = False
-        
+
         def __init__(self) :
             if (DEBUG): print(f"\n\t{type(self).__name__}")
 
@@ -379,7 +379,9 @@ class Wrapper:
         def __init__(self, boolean: bool = False):
             super().__init__()
             self.name = Wrapper.tokenizer.getTokenName()
-            if boolean : Wrapper.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
+            if boolean : 
+                if (self.name in Wrapper.identifiers) : raise ValueError(f"ERROR: Double-declaration of {self.name}")
+                else: Wrapper.identifiers[self.name] = "I, " + self.name + " , have been declared but not initialized"
             elif self.name not in Wrapper.identifiers : raise ValueError(f"ERROR: Use of undeclared identifer {self.name}")
             self.getConsume()
 
