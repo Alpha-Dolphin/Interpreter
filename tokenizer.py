@@ -19,8 +19,7 @@ class Tokenizer:
         return self.tokenList[self.currPos][1]
 
     def skipToken(self) :
-        if (self.currPos < len(self.tokenList) and self.tokenList[self.currPos][0] < 33) :
-            self.currPos += 1
+        if (self.currPos < len(self.tokenList) and self.tokenList[self.currPos][0] < 33) : self.currPos += 1
 
     def tokenize(self) :
         #This functionality is dumb
@@ -79,12 +78,9 @@ class Tokenizer:
         self.tokenList.append((33, "\x1A"))
 
     def dumbChecker(self, dumb, token) :
-        if tokenDict.get(token, -1) in range(12, 31) :
-            return True
-        elif dumb :
-            return False
-        else :
-            raise ValueError("Invalid whitespace at token: \"%s\"" % token)
+        if tokenDict.get(token, -1) in range(12, 31) : return True
+        elif dumb : return False
+        else : raise ValueError("Invalid whitespace at token: \"%s\"" % token)
 
 if __name__ == '__main__':
     program_file_name = "debug.txt"
