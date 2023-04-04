@@ -40,9 +40,10 @@ class Wrapper:
         def isTokenPresent(self, token: str) -> bool:
             return Wrapper.tokenizer.getTokenName() == token
         
-        def handleSuperflousToken(self, token: str) -> None:
+        def handleSuperflousToken(self, token) -> None:
             if (DEBUG) : print(token, end=' ')
-            self.throwError(token) if (Wrapper.tokenizer.getTokenName() != token) else Wrapper.tokenizer.skipToken()
+            if ((type(token) is int and Wrapper.tokenizer.getTokenNumber() != token) or (type(token) is str and Wrapper.tokenizer.getTokenName() != token)) : self.throwError(str(token))
+            Wrapper.tokenizer.skipToken()
         
         def getConsume(self) -> str:
             string = Wrapper.tokenizer.getTokenName()
@@ -71,6 +72,7 @@ class Wrapper:
             super().handleSuperflousToken('begin')
             self.stmtSeq = Wrapper.StmtSeqNode()
             super().handleSuperflousToken('end')
+            super().handleSuperflousToken(33)
 
         def exec(self) :
             self.declSeq.exec()
