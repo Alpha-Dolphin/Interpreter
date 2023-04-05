@@ -12,6 +12,8 @@ class Wrapper:
 
     def __init__(self, program_file_name, input_file_name) :
         Wrapper.identifiers = {}
+        program_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name
+        input_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + input_file_name
         Wrapper.tokenizer = Tokenizer(program_file_name)
         with open(input_file_name) as input_file: file_contents = input_file.read()
         Wrapper.inputList = file_contents.split()
@@ -125,7 +127,7 @@ class Wrapper:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken('int')
-            self.idList = Wrapper.IDListNode()
+            self.idList = Wrapper.IDListNode(True)
             super().handleSuperflousToken(';')
 
         def exec(self) :
@@ -137,12 +139,12 @@ class Wrapper:
             super().indentPrint(";", ind)
 
     class IDListNode(Node) :
-        def __init__(self) :
+        def __init__(self, boolean) :
             super().__init__()
-            self.id = Wrapper.IDNode(True)
+            self.id = Wrapper.IDNode(boolean)
             if super().isTokenPresent(',') :
                 super().handleSuperflousToken(',')
-                self.idList = Wrapper.IDListNode()
+                self.idList = Wrapper.IDListNode(boolean)
 
         def exec(self) :
             result = [self.id.exec()]
@@ -236,7 +238,7 @@ class Wrapper:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken("read")
-            self.idList = Wrapper.IDListNode()
+            self.idList = Wrapper.IDListNode(False)
 
         def exec(self) :
             #Error message fine per Tyler Ferguson
@@ -250,7 +252,7 @@ class Wrapper:
         def __init__(self) :
             super().__init__()
             super().handleSuperflousToken("write")
-            self.idList = Wrapper.IDListNode()
+            self.idList = Wrapper.IDListNode(False)
 
         def prettyPrint(self, ind) :
             super().indentPrint("write", ind)
@@ -410,8 +412,6 @@ if __name__ == '__main__':
         program_file_name = sys.argv[1]
         if len(sys.argv) > 2:
             input_file_name = sys.argv[2]
-    program_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name
-    input_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + input_file_name
     ast = Wrapper(program_file_name, input_file_name)
     ast.prettyPrint()
     ast.exec()
