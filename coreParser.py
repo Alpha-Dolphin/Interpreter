@@ -33,7 +33,7 @@ class Wrapper:
     class Node:
         newLine = False
 
-        def __init__(self) :
+        def __init__(self) -> None:
             if (DEBUG): print(f"\n\t{type(self).__name__}")
 
         def throwError(self, token : str) -> None:
