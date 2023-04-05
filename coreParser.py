@@ -44,9 +44,7 @@ class Wrapper:
         def isTokenPresent(self, token) -> bool:
             if (type(token) is int) : return Wrapper.tokenizer.getTokenNumber() == token
             elif (type(token) is str) : return Wrapper.tokenizer.getTokenName() == token
-            else : 
-                self.throwError(str(token))
-                return False
+            else : raise ValueError("ERROR - isTokenPresent called on token of type %s\n", type(token))
 
         #Sucks that Python doesn't support overloading 
         def handleSuperflousToken(self, token) -> None:
