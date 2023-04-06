@@ -11,11 +11,9 @@ class Wrapper:
     #Wrapper Methods
 
     def __init__(self, program_file_name, input_file_name) :
-        program_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name
-        input_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + input_file_name
         Wrapper.identifiers = {}
         Wrapper.tokenizer = Tokenizer(program_file_name)
-        with open(input_file_name) as input_file: file_contents = input_file.read()
+        with open(os.path.dirname(os.path.abspath(__file__)) + '\\' + input_file_name) as input_file: file_contents = input_file.read()
         Wrapper.inputList = file_contents.split()
         Wrapper.treeBase = Wrapper.ProgramNode()
 

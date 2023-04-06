@@ -8,8 +8,7 @@ class Tokenizer:
     def __init__(self, program_file_name) :
         self.currPos = 0
         self.tokenList = []
-        self.input_file = open(program_file_name, "r")
-        with open(program_file_name) as self.input_file : self.tokenize()
+        with open(os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name, "r") as self.input_file : self.tokenize()
 
     def getTokenNumber(self) -> int:
         return self.tokenList[self.currPos][0]
@@ -85,6 +84,5 @@ class Tokenizer:
 if __name__ == '__main__':
     program_file_name = "debug.txt"
     if len(sys.argv) > 1: program_file_name = sys.argv[1]
-    program_file_name = os.path.dirname(os.path.abspath(__file__)) + '\\' + program_file_name
     tokenizer = Tokenizer(program_file_name)
     for token in tokenizer.tokenList : print(token)
