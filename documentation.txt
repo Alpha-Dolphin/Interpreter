@@ -3,10 +3,12 @@ Within, there is a Node class that gives basic debugging methods and abstracts o
 Then, each of the nodes has an object-oriented implementation.
 Each node has an init method, which parses the node and any subnodes.
 They also have prettyPrint and exec methods, which pretty print and execute, respectively.
+I added a method to the tokenizer which directly gives the token name per the approval of Tyler Ferguson. \
+    This allows for readable interfacing with the tokenizer, rather than needing to use esoteric numbers like 27. \
+    Furthermore, this could already be done by creating a method that interfacing with getToken and reverses the dictionary search, so I am not adding anything beyond what could theoretically already be done with the default tokenizer methods.
 
 How to run the program - If not given any input arguments, the program assumes that the program of interest is located in a file called debug.txt and the input stream is located in a file called input.txt.
 If given input arguments, the program assumes the first argument is the name of the file which has the program of interest and the second argument is the input stream file.
-This should work even if you run the program from the command line of a different directory.
+This should work even if you run the program from the command line of a different directory so long as all files are in the same directory.
 
 I tested the coreParser with different debug.txt and input.txt configurations. It has no bugs or missing features to my knowledge.
-In VSCode, the Python language analyzer says coreParser has 4 bugs for some reason. However, it works completely fine for me, even after I clear the cache.
