@@ -37,7 +37,7 @@ class Wrapper:
             if (DEBUG): print(f"\n\t{type(self).__name__}")
 
         def throwError(self, token : str) -> None:
-            raise ValueError("\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
+            raise ValueError("ERROR - Grammar violated\n\tPosition - %s\n\tNode Type - %s\n\tExpected Token - %s\n\tTokenizer Token - %s" % \
             (Wrapper.tokenizer.currPos, type(self).__name__, token, Wrapper.tokenizer.getTokenName()))
   
         #Sucks that Python doesn't support overloading
