@@ -362,7 +362,7 @@ class Wrapper:
             else :
                 self.child.prettyPrint(ind)
 
-    # Redudant Node, fine per Tyler Fergurson
+    # Redudant Node, fine per Tyler Ferguson
     # class CompOpNode(Node) :
     #     def __init__(self) :
     #         super().__init__()
