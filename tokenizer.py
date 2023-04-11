@@ -13,7 +13,6 @@ class Tokenizer:
     def getTokenNumber(self) -> int:
         return self.tokenList[self.currPos][0]
     
-    #Tokenizer refactoring fine per Tyler Ferguson
     def getTokenName(self) -> str:
         return self.tokenList[self.currPos][1]
 

@@ -237,7 +237,6 @@ class Wrapper:
             self.idList = Wrapper.IDListNode(False)
 
         def exec(self) :
-            #Error message fine per Tyler Ferguson
             for identifier in self.idList.exec(): Wrapper.identifiers[identifier] = Wrapper.inputList.pop(0)
 
         def prettyPrint(self, ind) :
@@ -298,7 +297,6 @@ class Wrapper:
             super().handleSuperflousToken(")")
 
         def exec(self) :
-            #Error message fine per Tyler Ferguson
             return eval(f"{self.op1.exec()} {self.compOp} {self.op2.exec()}")
 
         def prettyPrint(self, ind) :
@@ -360,7 +358,6 @@ class Wrapper:
             else :
                 self.child.prettyPrint(ind)
 
-    # Redudant Node, fine per Tyler Ferguson
     # class CompOpNode(Node) :
     #     def __init__(self) :
     #         super().__init__()
