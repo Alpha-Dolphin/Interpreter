@@ -21,7 +21,7 @@ class Tokenizer:
 
     def tokenize(self) :
         #This functionality is dumb
-        dumb = True
+        ws = True
 
         for currLine in self.input_file :
             i = 0
@@ -32,7 +32,7 @@ class Tokenizer:
 
                 if currLine[i] == ' ' :
                     i += 1
-                    dumb = True
+                    ws = True
 
                 #Integers
                 
@@ -41,7 +41,7 @@ class Tokenizer:
                     while i < len(currLine) and currLine[i].isdigit() :
                         value = value * 10 + int(currLine[i])
                         i += 1
-                    dumb = self.dumbChecker(dumb, value)
+                    ws = self.wsChecker(ws, value)
                     self.tokenList.append((31, value))
 
                 #Identifiers
@@ -51,7 +51,7 @@ class Tokenizer:
                     while i < len(currLine) and (currLine[i].isdigit() or currLine[i].isupper()) :
                         id += currLine[i]
                         i += 1
-                    dumb = self.dumbChecker(dumb, id)
+                    ws = self.wsChecker(ws, id)
                     self.tokenList.append((32, id))
 
                 #Keywords & reserved words
@@ -66,7 +66,7 @@ class Tokenizer:
                             if len(token) == 1 and (token == '=' or token == '!' or token == '<' or token == '>') and i < len(currLine) and currLine[i] == '='  :
                                 #Could manually append an "=" but this is simplier
                                 continue
-                            dumb = self.dumbChecker(dumb, token)
+                            ws = self.wsChecker(ws, token)
                             self.tokenList.append((tokenDict[token], token))
                             break
                         #Check for invalid token
@@ -75,9 +75,9 @@ class Tokenizer:
         #Conventional end of text character
         self.tokenList.append((33, "\x1A"))
 
-    def dumbChecker(self, dumb, token) :
+    def wsChecker(self, ws, token) :
         if tokenDict.get(token, -1) in range(12, 31) : return True
-        elif dumb : return False
+        elif ws : return False
         else : raise ValueError("Invalid whitespace at token: \"%s\"" % token)
 
 if __name__ == '__main__':
