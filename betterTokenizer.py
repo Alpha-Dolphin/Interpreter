@@ -1,3 +1,5 @@
+import sys
+import os
 from dictionary import tokenDict
 from tokenizer import Tokenizer
 
@@ -54,3 +56,10 @@ class BetterTokenizer(Tokenizer) :
                             raise ValueError("Token is not an valid keyword: \"%s\"" % token)
         #Conventional end of text character
         self.tokenList.append((33, "\x1A"))
+
+if __name__ == '__main__':
+    program_file_name = "debug.txt"
+    if len(sys.argv) > 1: program_file_name = sys.argv[1]
+    betterTokenizer = BetterTokenizer(program_file_name)
+    for token in betterTokenizer.tokenList : print(token)
+    
